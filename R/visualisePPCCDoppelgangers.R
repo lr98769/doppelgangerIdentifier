@@ -29,7 +29,7 @@ visualisePPCCDoppelgangers <- function(ppccDoppelgangerResults){
     theme(plot.title = element_text(hjust = 0.5)) +
     xlab("Sample Pair Type") +
     scale_color_manual(values=c("#8800ff","#5c5c5c")) +
-    geom_hline(yintercept=0.9225526, color = "red")+
-    annotate(geom="text", label="Cut Off", x=1, y=0.9225526, vjust=-1, colour="red") +
+    geom_hline(yintercept=ppccDoppelgangerResults$cut_off, color = "red")+
+    annotate(geom="text", label="Cut Off", x=1, y=ppccDoppelgangerResults$cut_off, vjust=-1, colour="red") +
     guides(colour=guide_legend(title="Doppelganger Label"))
 }

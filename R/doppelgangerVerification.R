@@ -22,7 +22,7 @@ doppelgangerVerification <- function(experimentPlanFilename,
                                       seednum = 2021, 
                                       separator = "\\."){
   required_columns = c("Class", "Batch")
-  # Check that metadata contains "Class" columns
+  # Check that metadata contains "Class", "Batch" columns
   if (!all(required_columns %in% colnames(meta_data))){
     columns_to_be_included = setdiff(required_columns, colnames(meta_data))
     print(paste("Error: The following columns are not found in meta_data: ", 
