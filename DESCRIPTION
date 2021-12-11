@@ -1,0 +1,18 @@
+Package: doppelgangerIdentifier
+Title: Identifies Doppelgangers Between Datasets With PPCC And Meta data
+Version: 0.1
+Authors@R: person("Li Rong", "Wang", email = "LWANG039@e.ntu.edu.sg",
+            role = c("aut", "cre", "mat"),
+           comment = c(ORCID = "0000-0003-3546-9354"))
+Description: Identifies PPCC data doppelgangers between and within biomedical datasets 
+              using Pairwise Pearson's Correlation Coefficient (PPCC) as a similar metric
+              and meta data to define a suitable PPCC cut off point. Package also provides
+              functions to verify the presence of doppelganger effect. 
+License: use_gpl3_license()
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports:
+    sva,
+    ggplot2,
+    class
