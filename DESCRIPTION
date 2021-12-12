@@ -15,4 +15,5 @@ RoxygenNote: 7.1.2
 Imports:
     sva,
     ggplot2,
-    class
+    class,
+    utils
