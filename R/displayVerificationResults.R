@@ -9,12 +9,18 @@
 #' displayVerificationResults()
 
 displayVerificationResults <- function(functionalityResults,
-                                        originalTrainValidNames,
-                                        newTrainValidNames){
+                                        originalTrainValidNames=c(),
+                                        newTrainValidNames=c()){
   library(ggplot2)
+  # Ensure it is in the right order
   functionalityResults$accuracy_df$Train_Valid = factor(
     functionalityResults$accuracy_df$Train_Valid,
     levels = unique(functionalityResults$accuracy_df$Train_Valid))
+  # If no new name is given
+  if (length(originalTrainValidNames)==0 || length(newTrainValidNames)==0){
+    originalTrainValidNames = unique(functionalityResults$accuracy_df$Train_Valid)
+    newTrainValidNames = originalTrainValidNames
+  }
   ggplot(functionalityResults$accuracy_df, aes(x = Train_Valid, y = Accuracy,color=ifelse(FeatureSet=="top10variance", "Top 10% Variance", ifelse(FeatureSet=="bot10variance", "Bottom 10% Variance", "Random")))) +
     geom_violin(adjust =4, color=rgb(1,1,1))+ #69faff
     ggtitle("Accuracy of KNN Models") +

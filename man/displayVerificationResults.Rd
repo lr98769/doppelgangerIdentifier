@@ -6,8 +6,8 @@
 \usage{
 displayVerificationResults(
   functionalityResults,
-  originalTrainValidNames,
-  newTrainValidNames
+  originalTrainValidNames = c(),
+  newTrainValidNames = c()
 )
 }
 \arguments{
