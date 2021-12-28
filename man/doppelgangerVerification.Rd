@@ -11,7 +11,8 @@ doppelgangerVerification(
   meta_data,
   featureSetPortion = 0.1,
   seednum = 2021,
-  separator = "\\\\."
+  separator = "\\\\.",
+  do.batch.corr = TRUE
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ doppelgangerVerification(
 \item{separator}{The character separating the name of the training_validation pair
 e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in
 format "0 Doppel.train" if . is used as separator.}
+
+\item{do.batch.corr}{If false, then no batch correction is carrried out}
 
 \item{metadata}{File containing metadata}
 }

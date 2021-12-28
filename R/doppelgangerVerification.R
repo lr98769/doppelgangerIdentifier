@@ -10,6 +10,7 @@
 #' @param separator The character separating the name of the training_validation pair
 #' e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in
 #' format "0 Doppel.train" if . is used as separator.
+#' @param do.batch.corr If false, then no batch correction is carrried out
 #' @return Validation Accuracies
 #' @export
 #' @examples
@@ -20,7 +21,8 @@ doppelgangerVerification <- function(experimentPlanFilename,
                                       meta_data,
                                       featureSetPortion=0.1,
                                       seednum = 2021,
-                                      separator = "\\."){
+                                      separator = "\\.",
+                                     do.batch.corr=TRUE){
   required_columns = c("Class", "Batch")
   # Check that metadata contains "Class", "Batch" columns
   if (!all(required_columns %in% colnames(meta_data))){
@@ -34,8 +36,13 @@ doppelgangerVerification <- function(experimentPlanFilename,
 
   # 1. Prepocessing (Batch Correction and Min-Max Normalisation)
   print("1. Preprocessing data...")
-  batches = meta_data[colnames(raw_data), "Batch"]
-  return_list$combat_minmax = sva::ComBat(dat=raw_data, batch=batches)
+  if (do.batch.corr){
+    batches = meta_data[colnames(raw_data), "Batch"]
+    return_list$combat_minmax = sva::ComBat(dat=raw_data, batch=batches)
+  }
+  else {
+    return_list$combat_minmax = raw_data
+  }
   return_list$combat_minmax = as.data.frame(apply(return_list$combat_minmax,1, minmax))
 
   #2. Random Feature Set Selection
