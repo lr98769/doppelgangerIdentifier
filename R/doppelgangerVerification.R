@@ -10,7 +10,7 @@
 #' @param separator The character separating the name of the training_validation pair
 #' e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in
 #' format "0 Doppel.train" if . is used as separator.
-#' @param do.batch.corr If false, then no batch correction is carrried out
+#' @param do.batch.corr If false, then no batch correction is carried out
 #' @return Validation Accuracies
 #' @export
 #' @examples
