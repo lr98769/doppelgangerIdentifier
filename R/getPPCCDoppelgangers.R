@@ -6,13 +6,14 @@
 #' @param meta_data Data frame with the columns "Class", "Patient_ID", "Batch"
 #' indicating the class, patient id and batch of the sample respectively and each row
 #' is a sample
+#' @param do.batch.corr If False, no batch correction is done before doppelgangers are found
 #' @return A list containing the PPCC matrix and data frame and a list of
 #' doppelgangers identified
 #' @export
 #' @examples
 #' getPPCCDoppelgangers()
 
-getPPCCDoppelgangers <- function(raw_data, meta_data){
+getPPCCDoppelgangers <- function(raw_data, meta_data, do.batch.corr = TRUE){
   # Check that all column names are found in meta_data
   if (!all(colnames(raw_data) %in% rownames(meta_data))){
     print("Error: Not all samples (colnames) in raw_data are found in (rownames of) meta_data")
@@ -33,9 +34,15 @@ getPPCCDoppelgangers <- function(raw_data, meta_data){
   # If there are 2 batches
   if (length(unique(meta_data[["Batch"]]))==2){
     # 1. Batch correct the 2 data sets with sva:ComBat
-    print("1. Batch correcting the 2 data sets with sva:ComBat...")
-    batches = meta_data[colnames(raw_data), "Batch"]
-    return_list$Batch_corrected = sva::ComBat(dat=raw_data, batch=batches)
+    if (do.batch.corr){
+      print("1. Batch correcting the 2 data sets with sva:ComBat...")
+      batches = meta_data[colnames(raw_data), "Batch"]
+      return_list$Batch_corrected = sva::ComBat(dat=raw_data, batch=batches)
+    } else {
+      print("1. Skip batch correction")
+      return_list$Batch_corrected = raw_data
+    }
+
 
     #2. Calculate PPCC between samples of each batch
     # Separate batches

@@ -4,7 +4,7 @@
 \alias{getPPCCDoppelgangers}
 \title{A function to get PPCC correlation matrix and data frame and list of doppelgangers}
 \usage{
-getPPCCDoppelgangers(raw_data, meta_data)
+getPPCCDoppelgangers(raw_data, meta_data, do.batch.corr = TRUE)
 }
 \arguments{
 \item{raw_data}{Data frame where each column is a sample and each row is a variable}
@@ -12,6 +12,8 @@ getPPCCDoppelgangers(raw_data, meta_data)
 \item{meta_data}{Data frame with the columns "Class", "Patient_ID", "Batch"
 indicating the class, patient id and batch of the sample respectively and each row
 is a sample}
+
+\item{do.batch.corr}{If False, no batch correction is done before doppelgangers are found}
 }
 \value{
 A list containing the PPCC matrix and data frame and a list of

@@ -28,7 +28,7 @@ doppelgangerVerification(
 e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in
 format "0 Doppel.train" if . is used as separator.}
 
-\item{do.batch.corr}{If false, then no batch correction is carrried out}
+\item{do.batch.corr}{If false, then no batch correction is carried out}
 
 \item{metadata}{File containing metadata}
 }
