@@ -74,19 +74,23 @@ library(doppelgangerIdentifier)
 displayVerificationResults(veri_result)
 ```
 
-## Example
+## Tutorial
 
 In this example, we will be showing how PPCC data doppelgangers can be
 identified and verified for functionality with the
 doppelgangerIdentifier r package.
 
-## 0\) Importing the doppelgangerIdentifier package
+### 0\) Importing the doppelgangerIdentifier package
+
+``` r
+library("doppelgangerIdentifier")
+```
 
 > **Doppelganger effect**: When training and validation data are similar
 > by chance, resulting in an inflation of model accuracies on the
 > validation dataset regardless of how we train the model.
 
-## 1\) Importing Renal Carcinoma (RC) Dataset
+### 1\) Importing Renal Carcinoma (RC) Dataset
 
 To illustrate the impacts of the Doppelganger effect, we will be using a
 Renal Carcinoma (RC) gene expression dataset.
@@ -98,12 +102,12 @@ data(rc)
 data(rc_metadata)
 ```
 
-## 2\) What Do Functional Doppelgangers Look Like?
+### 2\) What Do Functional Doppelgangers Look Like?
 
 > **Functional Doppelgangers**: Sample pairs between training and
 > validation datasets that cause doppelganger effect.
 
-### Identifying doppelgangers
+#### Identifying doppelgangers
 
 When functional doppelgangers are found in both training and validation
 sets, the doppelganger effect is observed. Hence, it is important to
@@ -116,7 +120,7 @@ patients. Sample pairs of different class would be used as negative
 controls while sample pairs of the same class and same patient,
 indicative of leakage, would be used as positive controls.
 
-#### Identifying Data Doppelgangers
+##### Identifying Data Doppelgangers
 
 > **Data Doppelgangers**: Sample pairs of the same class that are highly
 > similar and hence have a high chance of being functional doppelgangers
@@ -222,7 +226,7 @@ visualisePPCCDoppelgangers(ppccDoppelgangerResults = ppccDoppelgangerResults)
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
-## 3\) Effects of functional doppelgangers in machine learning
+### 3\) Effects of functional doppelgangers in machine learning
 
 When functional doppelgangers are in both training and validation
 datasets, an inflation in accuracy on the validation data set regardless
@@ -333,3 +337,8 @@ displayVerificationResults(functionalityResults,
 ```
 
 <img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+
+We observe a dosage dependent relationship between the number of
+doppelgangers and the accuracy of models on the validation set since
+accuracy increases as the number of doppelgangers in validation set
+increases.
