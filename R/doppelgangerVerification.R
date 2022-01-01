@@ -11,6 +11,7 @@
 #' e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in
 #' format "0 Doppel.train" if . is used as separator.
 #' @param do.batch.corr If false, then no batch correction is carried out
+#' @param k K used in KNN models.
 #' @return Validation Accuracies
 #' @export
 #' @examples
@@ -22,7 +23,8 @@ doppelgangerVerification <- function(experimentPlanFilename,
                                       featureSetPortion=0.1,
                                       seednum = 2021,
                                       separator = "\\.",
-                                     do.batch.corr=TRUE){
+                                      do.batch.corr=TRUE,
+                                      k=5){
   required_columns = c("Class", "Batch")
   # Check that metadata contains "Class", "Batch" columns
   if (!all(required_columns %in% colnames(meta_data))){
@@ -104,7 +106,7 @@ doppelgangerVerification <- function(experimentPlanFilename,
       valid_x = return_list$combat_minmax[valid_x_sample_names, features]
       valid_y = as.factor(meta_data[valid_x_sample_names, "Class"])
 
-      pred = knn(train=x, test=valid_x, cl=y, k=5)
+      pred = knn(train=x, test=valid_x, cl=y, k=k)
 
       #Test performance on validation
       acc = sum(pred==valid_y)/length(valid_y)
