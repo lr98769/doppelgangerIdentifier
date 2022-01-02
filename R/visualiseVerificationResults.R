@@ -6,9 +6,9 @@
 #' @param newTrainVaidNames New names of training and validation pairs
 #' @export
 #' @examples
-#' displayVerificationResults()
+#' visualiseVerificationResults()
 
-displayVerificationResults <- function(functionalityResults,
+visualiseVerificationResults <- function(functionalityResults,
                                         originalTrainValidNames=c(),
                                         newTrainValidNames=c()){
   library(ggplot2)

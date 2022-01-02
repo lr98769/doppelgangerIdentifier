@@ -239,7 +239,7 @@ with the following steps:
 ![](tutorial/images/functionalDoppelgangerTesting.png)
 
 ``` r
-functionalityResults = doppelgangerVerification(
+functionalityResults = verifyDoppelgangers(
   experimentPlanFilename = "tutorial/experimentPlan.csv",
   raw_data = rc,
   meta_data = rc_metadata)
@@ -331,7 +331,7 @@ ori_train_valid_names = c("Doppel_0","Doppel_2", "Doppel_4", "Doppel_6", "Doppel
 
 new_train_valid_names = c("0 Doppel", "2 Doppel", "4 Doppel", "6 Doppel", "8 Doppel", "Binomial", "Perfect Leakage")
 
-displayVerificationResults(functionalityResults, 
+visualiseVerificationResults(functionalityResults, 
                             ori_train_valid_names, 
                             new_train_valid_names)
 ```

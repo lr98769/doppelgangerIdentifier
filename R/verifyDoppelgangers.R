@@ -15,9 +15,9 @@
 #' @return Validation Accuracies
 #' @export
 #' @examples
-#' doppelgangerVerification()
+#' verifyDoppelgangers()
 
-doppelgangerVerification <- function(experimentPlanFilename,
+verifyDoppelgangers <- function(experimentPlanFilename,
                                       raw_data,
                                       meta_data,
                                       featureSetPortion=0.1,
