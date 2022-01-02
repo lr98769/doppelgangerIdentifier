@@ -1,21 +1,37 @@
-#' Trains 12*numberOfTrainingAndValidationSets KNN classifiers to verify the
-#' functionality of PPCC
+#' Verifies the functionality of Doppelgangers
 #'
-#' This function verifies the functionality of PPCC
-#' @param experimentPlanFilename Name of file containing csv experiment plan
-#' @param raw_data Data frame where each column is a sample and each row is a variable
+#' The user constructs a csv file with with training-validation set pairs
+#' ideally incrementing the number of Doppelgangers between training and validation sets.
+#' For each training-validation set pair, 12 models with different feature sets will be trained.
+#' 10 random feature sets and 2 features sets of highest and lowest variance would be generated.
+#' If an increase in validation accuracy of the 10 random models with increasing number of doppelgangers
+#' can be observed, we can conclude that the doppelgangers included are functional doppelgangers.
+#'
+#' **Troubleshooting tips:**
+#' - Ensure all the headers have no spaces.
+#' - If excel is used for planning, save the spreadsheet as "CSV (MS-DOS) (*.csv)"
+#' - Use the exact label "train" and "valid" (take note of capital letters)
+#' - Ensure the separator does not exist in the name of the training-validation set (E.g. Doppel.0 is not allowed)
+#' - Try to put both training-validation columns beside each other and leave no column gaps
+#' - Refer to the csv file in the tutorial on the GitHub README.
+#'
+#' @param ppccDoppelgangerResults List returned from \code{\link{getPPCCDoppelgangers}}
+#' @param experimentPlanFilename Name of file containing csv experiment plan.
+#' The csv file has a header with the names of the training_validation sets (e.g. "Doppel_0.train" or "Doppel_0.valid").
+#' In each column (e.g. "Doppel_0.train" column), we include the names of all samples included in this training/validation set.
 #' @param metadata File containing metadata
 #' @param featureSetPortion Proportion of variables to be used for feature set generation
 #' @param seednum Seed number for random feature set generation
 #' @param separator The character separating the name of the training_validation pair
 #' e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in
-#' format "0 Doppel.train" if . is used as separator.
-#' @param do.batch.corr If false, then no batch correction is carried out
-#' @param k K used in KNN models.
+#' format "0 Doppel.train" if . is used as separator
 #' @return Validation Accuracies
 #' @export
 #' @examples
-#' verifyDoppelgangers()
+#' verificationResults = verifyDoppelgangers(
+#' experimentPlanFilename = "tutorial/experimentPlan.csv",
+#' raw_data = rc,
+#' meta_data = rc_metadata)
 
 verifyDoppelgangers <- function(experimentPlanFilename,
                                       raw_data,

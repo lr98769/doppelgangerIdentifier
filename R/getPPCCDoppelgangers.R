@@ -1,17 +1,32 @@
-#' A function to get PPCC correlation matrix and data frame and list of doppelgangers
+#' A function to identify PPCC Data Doppelgangers
 #'
-#' This function gets PPCC between a samples of 2 different data sets/batches and
-#' identifies doppelgangers between them
-#' @param raw_data Data frame where each column is a sample and each row is a variable
+#' This function performs the following steps to identify PPCC data dopplgangers between batches:
+#' 1. Batch correct batches with sva::ComBat
+#' 2. Calculate PPCC values between samples of different batches
+#' 3. Label sample pairs according to their patient id and class similarities
+#' 4. Calculate PPCC cut off point (maximum PPCC of any "Different Class Different Patient" sample pair)
+#' 5. Identify PPCC Data Doppelgangers as sample pairs with "Same Class Different Patient" labels with PPCC values > PPCC cut-off.
+#'
+#' This function also identifies PPCC data doppelgangers within a batch (if only 1 batch is detected in the metadata document).
+#' In this case it performs the following steps:
+#' 1. Calculate PPCC values between samples within the batch
+#' 2. Label sample pairs according to their patient id and class similarities
+#' 3. Calculate PPCC cut off point (maximum PPCC of any "Different Class Different Patient" sample pair)
+#' 4. Identify PPCC Data Doppelgangers as sample pairs with "Same Class Different Patient" labels with PPCC values > PPCC cut-off.
+#'
+#' **Troubleshooting Tips:**
+#' 1. Ensure all (rownames) samples in the meta_data can be found in the colnames in the raw_data and vice versa.
+#'
+#' @param raw_data Data frame where each column is a sample and each row is a variable where rowname of each row is the variable name.
 #' @param meta_data Data frame with the columns "Class", "Patient_ID", "Batch"
 #' indicating the class, patient id and batch of the sample respectively and each row
-#' is a sample
-#' @param do.batch.corr If False, no batch correction is done before doppelgangers are found
+#' is a sample name. Ensure the sample names are rownames of the data frame not a separate column in the data set.
+#' @param do.batch.corr If False, no batch correction is carried out before doppelgangers are found
 #' @return A list containing the PPCC matrix and data frame and a list of
 #' doppelgangers identified
 #' @export
 #' @examples
-#' getPPCCDoppelgangers()
+#' ppccDoppelgangerResults = getPPCCDoppelgangers(rc, rc_metadata)
 
 getPPCCDoppelgangers <- function(raw_data, meta_data, do.batch.corr = TRUE){
   # Check that all column names are found in meta_data

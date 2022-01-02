@@ -2,27 +2,48 @@
 % Please edit documentation in R/getPPCCDoppelgangers.R
 \name{getPPCCDoppelgangers}
 \alias{getPPCCDoppelgangers}
-\title{A function to get PPCC correlation matrix and data frame and list of doppelgangers}
+\title{A function to identify PPCC Data Doppelgangers}
 \usage{
 getPPCCDoppelgangers(raw_data, meta_data, do.batch.corr = TRUE)
 }
 \arguments{
-\item{raw_data}{Data frame where each column is a sample and each row is a variable}
+\item{raw_data}{Data frame where each column is a sample and each row is a variable where rowname of each row is the variable name.}
 
 \item{meta_data}{Data frame with the columns "Class", "Patient_ID", "Batch"
 indicating the class, patient id and batch of the sample respectively and each row
-is a sample}
+is a sample name. Ensure the sample names are rownames of the data frame not a separate column in the data set.}
 
-\item{do.batch.corr}{If False, no batch correction is done before doppelgangers are found}
+\item{do.batch.corr}{If False, no batch correction is carried out before doppelgangers are found}
 }
 \value{
 A list containing the PPCC matrix and data frame and a list of
 doppelgangers identified
 }
 \description{
-This function gets PPCC between a samples of 2 different data sets/batches and
-identifies doppelgangers between them
+This function performs the following steps to identify PPCC data dopplgangers between batches:
+\enumerate{
+\item Batch correct batches with sva::ComBat
+\item Calculate PPCC values between samples of different batches
+\item Label sample pairs according to their patient id and class similarities
+\item Calculate PPCC cut off point (maximum PPCC of any "Different Class Different Patient" sample pair)
+\item Identify PPCC Data Doppelgangers as sample pairs with "Same Class Different Patient" labels with PPCC values > PPCC cut-off.
+}
+}
+\details{
+This function also identifies PPCC data doppelgangers within a batch (if only 1 batch is detected in the metadata document).
+In this case it performs the following steps:
+\enumerate{
+\item Calculate PPCC values between samples within the batch
+\item Label sample pairs according to their patient id and class similarities
+\item Calculate PPCC cut off point (maximum PPCC of any "Different Class Different Patient" sample pair)
+\item Identify PPCC Data Doppelgangers as sample pairs with "Same Class Different Patient" labels with PPCC values > PPCC cut-off.
+}
+
+\strong{Troubleshooting Tips:}
+\enumerate{
+\item Ensure all (rownames) samples in the meta_data can be found in the colnames in the raw_data and vice versa.
+}
 }
 \examples{
-getPPCCDoppelgangers()
+ppccDoppelgangerResults = getPPCCDoppelgangers(rc, rc_metadata)
 }

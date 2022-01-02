@@ -10,8 +10,9 @@ visualisePPCCDoppelgangers(ppccDoppelgangerResults)
 \item{ppccDoppelgangerResults}{List returned from \code{\link{getPPCCDoppelgangers}}}
 }
 \description{
-This function gets visualizes PPCC data doppelgangers on a scatter plot
+This function visualizes PPCC data doppelgangers from \code{\link{getPPCCDoppelganger}}
+on adjacent univariate scatter plot.
 }
 \examples{
-visualisePPCCDoppelgangers()
+visualisePPCCDoppelgangers(ppccDoppelgangerResults = ppccDoppelgangerResults)
 }

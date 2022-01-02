@@ -51,7 +51,7 @@ library(doppelgangerIdentifier)
 visualisePPCCDoppelgangers(ppccDoppelgangerResults)
 ```
 
-### 3\. doppelgangerVerification
+### 3\. verifyDoppelgangers
 
 Tests inflationary effects of the PPCC data doppelganger.
 
@@ -62,16 +62,16 @@ Tests inflationary effects of the PPCC data doppelganger.
 
 ``` r
 library(doppelgangerIdentifier)
-veri_result = doppelgangerVerification(experimentPlanFilename, raw_data, meta_data)
+veri_result = verifyDoppelgangers(experimentPlanFilename, raw_data, meta_data)
 ```
 
-### 4\. displayVerificationResults
+### 4\. visualiseVerificationResults
 
 Visualise the accuracy of each Train-Valid Pair.
 
 ``` r
 library(doppelgangerIdentifier)
-displayVerificationResults(veri_result)
+visualiseVerificationResults(veri_result)
 ```
 
 ## Tutorial
@@ -239,7 +239,7 @@ with the following steps:
 ![](tutorial/images/functionalDoppelgangerTesting.png)
 
 ``` r
-functionalityResults = verifyDoppelgangers(
+verificationResults = verifyDoppelgangers(
   experimentPlanFilename = "tutorial/experimentPlan.csv",
   raw_data = rc,
   meta_data = rc_metadata)
@@ -266,7 +266,7 @@ list:
 <!-- end list -->
 
 ``` r
-View(functionalityResults$combat_minmax)
+View(verificationResults$combat_minmax)
 ```
 
 2.  feature\_sets: The 10 randomly generated feature sets and 2 feature
@@ -275,7 +275,7 @@ View(functionalityResults$combat_minmax)
 <!-- end list -->
 
 ``` r
-View(functionalityResults$feature_sets)
+View(verificationResults$feature_sets)
 ```
 
 3.  accuracy\_mat: The accuracies of each training\_validation and
@@ -284,7 +284,7 @@ View(functionalityResults$feature_sets)
 <!-- end list -->
 
 ``` r
-View(functionalityResults$accuracy_mat)
+View(verificationResults$accuracy_mat)
 ```
 
 4.  accuracy\_df: The accuracies of each training\_validation and
@@ -293,7 +293,7 @@ View(functionalityResults$accuracy_mat)
 <!-- end list -->
 
 ``` r
-View(functionalityResults$accuracy_df)
+View(verificationResults$accuracy_df)
 ```
 
 In our current experiment plan, there are 6 training-validation data set
@@ -331,7 +331,7 @@ ori_train_valid_names = c("Doppel_0","Doppel_2", "Doppel_4", "Doppel_6", "Doppel
 
 new_train_valid_names = c("0 Doppel", "2 Doppel", "4 Doppel", "6 Doppel", "8 Doppel", "Binomial", "Perfect Leakage")
 
-visualiseVerificationResults(functionalityResults, 
+visualiseVerificationResults( verificationResults, 
                             ori_train_valid_names, 
                             new_train_valid_names)
 ```

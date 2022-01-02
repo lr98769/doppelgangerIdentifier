@@ -5,21 +5,27 @@
 \title{Displays accuracies from functionality analysis}
 \usage{
 visualiseVerificationResults(
-  functionalityResults,
+  verificationResults,
   originalTrainValidNames = c(),
   newTrainValidNames = c()
 )
 }
 \arguments{
-\item{ppccDoppelgangerResults}{List returned from  \code{\link{doppelgangerFunctionalityVerification}}}
+\item{verificationResults}{List returned from  \code{\link{verifyDoppelgangers}}}
 
 \item{originalTrainVaidNames}{Original names of training and validation pairs}
 
 \item{newTrainVaidNames}{New names of training and validation pairs}
 }
 \description{
-Displays results from \code{\link{doppelgangerFunctionalityVerification}}
+Displays results from \code{\link{verifyDoppelgangers}}
 }
 \examples{
-visualiseVerificationResults()
+ori_train_valid_names = c("Doppel_0","Doppel_2", "Doppel_4", "Doppel_6", "Doppel_8", "Neg_Con", "Pos_Con")
+
+new_train_valid_names = c("0 Doppel", "2 Doppel", "4 Doppel", "6 Doppel", "8 Doppel", "Binomial", "Perfect Leakage")
+
+visualiseVerificationResults( verificationResults,
+                              ori_train_valid_names,
+                              new_train_valid_names)
 }
