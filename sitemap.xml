@@ -10,6 +10,18 @@
     <loc>https://lr98769.github.io/doppelgangerIdentifier/index.html</loc>
   </url>
   <url>
+    <loc>https://lr98769.github.io/doppelgangerIdentifier/reference/all.html</loc>
+  </url>
+  <url>
+    <loc>https://lr98769.github.io/doppelgangerIdentifier/reference/all_metadata.html</loc>
+  </url>
+  <url>
+    <loc>https://lr98769.github.io/doppelgangerIdentifier/reference/dmd.html</loc>
+  </url>
+  <url>
+    <loc>https://lr98769.github.io/doppelgangerIdentifier/reference/dmd_metadata.html</loc>
+  </url>
+  <url>
     <loc>https://lr98769.github.io/doppelgangerIdentifier/reference/getPPCCDoppelgangers.html</loc>
   </url>
   <url>
@@ -20,6 +32,12 @@
   </url>
   <url>
     <loc>https://lr98769.github.io/doppelgangerIdentifier/reference/labelClassPatientPerPair.html</loc>
+  </url>
+  <url>
+    <loc>https://lr98769.github.io/doppelgangerIdentifier/reference/leuk.html</loc>
+  </url>
+  <url>
+    <loc>https://lr98769.github.io/doppelgangerIdentifier/reference/leuk_metadata.html</loc>
   </url>
   <url>
     <loc>https://lr98769.github.io/doppelgangerIdentifier/reference/loadExperimentPlan.html</loc>
