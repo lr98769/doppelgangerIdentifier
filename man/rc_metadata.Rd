@@ -18,10 +18,13 @@ A data frame with 36 samples (rows) and 5 variables (columns):
 \url{https://dx.doi.org/10.1038\%2Fnm.3807}
 }
 \usage{
-data(rc)
+data(rc_metadata)
 }
 \description{
-Contains the "Class"
+Refer to \code{\link{rc}} for details on the Renal Cell Carcinoma Proteomics data set.
+}
+\details{
+Contains the "Class", "Histological Type", "Patient ID", "Sample ID" and "Batch" of each sample.
 }
 \references{
 Guo T, Kouvonen P, Koh CC et al. Rapid mass spectrometric conversion of tissue biopsy samples into permanent quantitative digital proteome maps, Nature medicine 2015;21:407-413.

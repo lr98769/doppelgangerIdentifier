@@ -74,6 +74,21 @@ library(doppelgangerIdentifier)
 visualiseVerificationResults(veri_result)
 ```
 
+## Data Sets
+
+4 unprocessed data sets (no batch correction carried out) and their meta
+data are available and ready to use with the doppelgangerIdentifer R
+package.
+
+| Name |                      Description                       |             Citation              |
+| :--: | :----------------------------------------------------: | :-------------------------------: |
+|  rc  |        Renal Cell Carcinoma Proteomics Data Set        |            Guo et al.             |
+| dmd  |  Duchenne Muscular Dystrophy (DMD) Microarry Data Set  | Haslett et al. & Pescatori et al. |
+| leuk |              Leukemia Microarry Data Set               |  Golub et al. & Armstrong et al.  |
+| all  | Acute Lymphoblastic Leukaemia (ALL) Microarry Data Set |     Ross et al. & Yeoh et al.     |
+
+*Note: Cite the original source of each data set used*
+
 ## Tutorial
 
 In this example, we will be showing how PPCC data doppelgangers can be
