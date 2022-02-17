@@ -26,7 +26,7 @@ visualisePPCCDoppelgangers <- function(ppccDoppelgangerResults){
   }
 
   qplot(data=ppccDoppelgangerResults$PPCC_df, x=ClassPatient,y=PPCC, colour=DoppelgangerLabel, geom = "jitter", margins = TRUE) +
-    scale_y_continuous(breaks = seq(0, 1, 0.1))+
+    scale_y_continuous(breaks = seq(-1, 1, 0.1))+
     ggtitle(label="PPCC Doppelganger Identification") +
     theme(plot.title = element_text(hjust = 0.5)) +
     xlab("Sample Pair Type") +
