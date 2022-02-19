@@ -4,7 +4,12 @@
 \alias{getPPCCDoppelgangers}
 \title{A function to identify PPCC Data Doppelgangers}
 \usage{
-getPPCCDoppelgangers(raw_data, meta_data, do.batch.corr = TRUE)
+getPPCCDoppelgangers(
+  raw_data,
+  meta_data,
+  do.batch.corr = TRUE,
+  correlation_function = cor
+)
 }
 \arguments{
 \item{raw_data}{Data frame where each column is a sample and each row is a variable where rowname of each row is the variable name.}
@@ -14,6 +19,9 @@ indicating the class, patient id and batch of the sample respectively and each r
 is a sample name. Ensure the sample names are rownames of the data frame not a separate column in the data set.}
 
 \item{do.batch.corr}{If False, no batch correction is carried out before doppelgangers are found}
+
+\item{correlation_function}{Correlation function use. Pearson's Correlation Coefficient is used as the default correlation function.
+User defined functions should accept two vector parameters, x and y.}
 }
 \value{
 A list containing the PPCC matrix and data frame and a list of

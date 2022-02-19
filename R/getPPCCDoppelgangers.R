@@ -22,13 +22,15 @@
 #' indicating the class, patient id and batch of the sample respectively and each row
 #' is a sample name. Ensure the sample names are rownames of the data frame not a separate column in the data set.
 #' @param do.batch.corr If False, no batch correction is carried out before doppelgangers are found
+#' @param correlation_function Correlation function use. Pearson's Correlation Coefficient is used as the default correlation function.
+#'                             User defined functions should accept two vector parameters, x and y.
 #' @return A list containing the PPCC matrix and data frame and a list of
 #' doppelgangers identified
 #' @export
 #' @examples
 #' ppccDoppelgangerResults = getPPCCDoppelgangers(rc, rc_metadata)
 
-getPPCCDoppelgangers <- function(raw_data, meta_data, do.batch.corr = TRUE){
+getPPCCDoppelgangers <- function(raw_data, meta_data, do.batch.corr = TRUE, correlation_function=cor){
   # Check that all column names are found in meta_data
   if (!all(colnames(raw_data) %in% rownames(meta_data))){
     print("Error: Not all samples (colnames) in raw_data are found in (rownames of) meta_data")
@@ -83,7 +85,7 @@ getPPCCDoppelgangers <- function(raw_data, meta_data, do.batch.corr = TRUE){
     index = 1
     for (i in 1:ncol(batches[[1]])){
       for (j in 1:ncol(batches[[2]])){
-        ppcc = cor(batches[[1]][,i], batches[[2]][,j])
+        ppcc = correlation_function(batches[[1]][,i], batches[[2]][,j])
         return_list$PPCC_matrix[i,j] = ppcc
         return_list$PPCC_df[index,] = c(colnames(batches[[1]])[i],
                                         colnames(batches[[2]])[j], ppcc)
@@ -99,24 +101,39 @@ getPPCCDoppelgangers <- function(raw_data, meta_data, do.batch.corr = TRUE){
   else if (length(unique(meta_data[["Batch"]]))==1){
     print("1. No batch correction since there is only 1 batch...")
 
-    print("2. Calculating PPCC between samples of the same dataset...")
-    return_list$PPCC_matrix = cor(raw_data)
-    return_list$PPCC_matrix[upper.tri(return_list$PPCC_matrix,diag = FALSE)] = NA #to prevent repeated pairs
-    numberOfRows = sum(!is.na(return_list$PPCC_matrix))
+    num_samples = ncol(raw_data)
+    sample_names = colnames(raw_data)
+    number_of_pairs = num_samples*(num_samples+1)/2
+
+    # Get ppcc_matrix and ppcc_df (For visualization with graph)
+    return_list$PPCC_matrix = matrix(,nrow=num_samples,
+                                     ncol=num_samples,
+                                     dimnames = list(sample_names,sample_names))
     return_list$PPCC_df = as.data.frame(
-      matrix(nrow=numberOfRows, ncol=3,
+      matrix(nrow=number_of_pairs, ncol=3,
              dimnames=list(c(), c("Sample1", "Sample2", "PPCC")))
     )
+
+    # Progress bar
+    print("2. Calculating PPCC between samples of the same dataset...")
+    total = number_of_pairs
+    pb = txtProgressBar(min = 0, max = 100, initial = 1, label="0% done", style=3)
     index = 1
-    for (sample1 in rownames(return_list$PPCC_matrix)){
-      for (sample2 in colnames(return_list$PPCC_matrix)){
-        ppcc = return_list$PPCC_matrix[sample1, sample2]
-        if (!is.na(ppcc)){
-          return_list$PPCC_df[index, ] = c(sample1, sample2, ppcc)
-          index = index + 1
+    for (i in 1:num_samples){
+      for (j in 1:num_samples){
+        if (i>=j){
+          ppcc = correlation_function(raw_data[,i], raw_data[,j])
+          return_list$PPCC_matrix[i,j] = ppcc
+          return_list$PPCC_df[index,] = c(sample_names[i],
+                                          sample_names[j], ppcc)
+          info = sprintf("%f%% done", round(i/total *100))
+          setTxtProgressBar(pb, index/total *100, label=info)
+          index=index+1
         }
       }
     }
+    return_list$PPCC_matrix[upper.tri(return_list$PPCC_matrix,diag = FALSE)] = NA #to prevent repeated pairs
+    close = close(pb)
   }
   else {
     print("Error: There should only be 1 or 2 batches in the \"Batch\" column of meta_data")
