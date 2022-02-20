@@ -43,19 +43,19 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">visualiseVerificationResults</span><span class="op">(</span>
-  <span class="va">verificationResults</span>,
-  originalTrainValidNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>,
-  newTrainValidNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="va">verification_results</span>,
+  original_train_valid_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>,
+  new_train_valid_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>verificationResults</dt>
+    <dl><dt>verification_results</dt>
 <dd><p>List returned from  <code><a href="verifyDoppelgangers.html">verifyDoppelgangers</a></code></p></dd>
-<dt>originalTrainVaidNames</dt>
+<dt>original_train_valid_names</dt>
 <dd><p>Original names of training and validation pairs</p></dd>
-<dt>newTrainVaidNames</dt>
+<dt>new_train_valid_names</dt>
 <dd><p>New names of training and validation pairs</p></dd>
 </dl></div>
 
@@ -65,10 +65,10 @@
 <span class="r-in"></span>
 <span class="r-in"><span class="va">new_train_valid_names</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0 Doppel"</span>, <span class="st">"2 Doppel"</span>, <span class="st">"4 Doppel"</span>, <span class="st">"6 Doppel"</span>, <span class="st">"8 Doppel"</span>, <span class="st">"Binomial"</span>, <span class="st">"Perfect Leakage"</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="fu">visualiseVerificationResults</span><span class="op">(</span> <span class="va">verificationResults</span>,</span>
+<span class="r-in"><span class="fu">visualiseVerificationResults</span><span class="op">(</span> <span class="va">verification_results</span>,</span>
 <span class="r-in">                              <span class="va">ori_train_valid_names</span>,</span>
 <span class="r-in">                              <span class="va">new_train_valid_names</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in factor(verificationResults$accuracy_df$Train_Valid, levels = unique(verificationResults$accuracy_df$Train_Valid)):</span> object 'verificationResults' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in factor(verification_results$accuracy_df$Train_Valid, levels = unique(verification_results$accuracy_df$Train_Valid)):</span> object 'verification_results' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

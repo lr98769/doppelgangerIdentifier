@@ -63,7 +63,7 @@ Identify PPCC Data Doppelgangers as sample pairs with "Same Class Different Pati
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getPPCCDoppelgangers</span><span class="op">(</span>
   <span class="va">raw_data</span>,
   <span class="va">meta_data</span>,
-  do.batch.corr <span class="op">=</span> <span class="cn">TRUE</span>,
+  do_batch_corr <span class="op">=</span> <span class="cn">TRUE</span>,
   correlation_function <span class="op">=</span> <span class="va">cor</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -76,7 +76,7 @@ Identify PPCC Data Doppelgangers as sample pairs with "Same Class Different Pati
 <dd><p>Data frame with the columns "Class", "Patient_ID", "Batch"
 indicating the class, patient id and batch of the sample respectively and each row
 is a sample name. Ensure the sample names are rownames of the data frame not a separate column in the data set.</p></dd>
-<dt>do.batch.corr</dt>
+<dt>do_batch_corr</dt>
 <dd><p>If False, no batch correction is carried out before doppelgangers are found</p></dd>
 <dt>correlation_function</dt>
 <dd><p>Correlation function use. Pearson's Correlation Coefficient is used as the default correlation function.
