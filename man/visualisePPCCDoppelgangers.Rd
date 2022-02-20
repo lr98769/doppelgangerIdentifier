@@ -14,5 +14,7 @@ This function visualizes PPCC data doppelgangers from \code{\link{getPPCCDoppelg
 on adjacent univariate scatter plot.
 }
 \examples{
+\dontrun{
 visualisePPCCDoppelgangers(ppcc_doppelganger_results = ppcc_doppelganger_results)
+}
 }

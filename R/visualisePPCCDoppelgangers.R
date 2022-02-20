@@ -6,7 +6,9 @@
 #' @param ppcc_doppelganger_results List returned from \code{\link{getPPCCDoppelgangers}}
 #' @export
 #' @examples
+#' \dontrun{
 #' visualisePPCCDoppelgangers(ppcc_doppelganger_results = ppcc_doppelganger_results)
+#' }
 
 visualisePPCCDoppelgangers <- function(ppcc_doppelganger_results){
   library(ggplot2)

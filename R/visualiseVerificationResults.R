@@ -7,6 +7,7 @@
 #' @param new_train_valid_names New names of training and validation pairs
 #' @export
 #' @examples
+#' \dontrun{
 #' ori_train_valid_names = c("Doppel_0","Doppel_2", "Doppel_4", "Doppel_6", "Doppel_8", "Neg_Con", "Pos_Con")
 #'
 #' new_train_valid_names = c("0 Doppel", "2 Doppel", "4 Doppel", "6 Doppel", "8 Doppel", "Binomial", "Perfect Leakage")
@@ -14,6 +15,7 @@
 #' visualiseVerificationResults( verification_results,
 #'                               ori_train_valid_names,
 #'                               new_train_valid_names)
+#' }
 
 visualiseVerificationResults <- function(verification_results,
                                         original_train_valid_names=c(),

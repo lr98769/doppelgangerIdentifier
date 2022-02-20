@@ -8,7 +8,8 @@ getPPCCDoppelgangers(
   raw_data,
   meta_data,
   do_batch_corr = TRUE,
-  correlation_function = cor
+  correlation_function = cor,
+  batch_corr_method = "ComBat"
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ is a sample name. Ensure the sample names are rownames of the data frame not a s
 
 \item{correlation_function}{Correlation function use. Pearson's Correlation Coefficient is used as the default correlation function.
 User defined functions should accept two vector parameters, x and y.}
+
+\item{batch_corr_method}{Batch correlation method used. Only 2 options are accepted "ComBat" or "ComBat_seq".}
 }
 \value{
 A list containing the PPCC matrix and data frame and a list of

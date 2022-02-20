@@ -24,13 +24,19 @@
 #' @param do_batch_corr If False, no batch correction is carried out before doppelgangers are found
 #' @param correlation_function Correlation function use. Pearson's Correlation Coefficient is used as the default correlation function.
 #'                             User defined functions should accept two vector parameters, x and y.
+#' @param batch_corr_method Batch correlation method used. Only 2 options are accepted "ComBat" or "ComBat_seq".
 #' @return A list containing the PPCC matrix and data frame and a list of
 #' doppelgangers identified
 #' @export
 #' @examples
 #' ppccDoppelgangerResults = getPPCCDoppelgangers(rc, rc_metadata)
 
-getPPCCDoppelgangers <- function(raw_data, meta_data, do_batch_corr = TRUE, correlation_function=cor){
+getPPCCDoppelgangers <- function(raw_data,
+                                 meta_data,
+                                 do_batch_corr = TRUE,
+                                 correlation_function=cor,
+                                 batch_corr_method="ComBat"){
+
   # Check that all column names are found in meta_data
   if (!all(colnames(raw_data) %in% rownames(meta_data))){
     print("Error: Not all samples (colnames) in raw_data are found in (rownames of) meta_data")
@@ -52,9 +58,21 @@ getPPCCDoppelgangers <- function(raw_data, meta_data, do_batch_corr = TRUE, corr
   if (length(unique(meta_data[["Batch"]]))==2){
     # 1. Batch correct the 2 data sets with sva:ComBat
     if (do_batch_corr){
-      print("1. Batch correcting the 2 data sets with sva:ComBat...")
-      batches = meta_data[colnames(raw_data), "Batch"]
-      return_list$Batch_corrected = sva::ComBat(dat=raw_data, batch=batches)
+      if (batch_corr_method=="ComBat"){
+        print("1. Batch correcting the 2 data sets with sva:ComBat...")
+        batches = meta_data[colnames(raw_data), "Batch"]
+        return_list$Batch_corrected = sva::ComBat(dat=raw_data, batch=batches)
+      }
+      else if (batch_corr_method=="ComBat_seq"){
+        print("1. Batch correcting the 2 data sets with sva:ComBat_seq...")
+        batches = meta_data[colnames(raw_data), "Batch"]
+        return_list$Batch_corrected = sva::ComBat_seq(counts=as.matrix(raw_data), batch=batches)
+      }
+      else {
+        print("Error: Invalid batch correction method is specified.")
+        print("Only ComBat and ComBat_seq batch correction methods are available.")
+        return()
+      }
     } else {
       print("1. Skip batch correction")
       return_list$Batch_corrected = raw_data

@@ -14,7 +14,8 @@ verifyDoppelgangers(
   do_batch_corr = TRUE,
   k = 5,
   num_random_feature_sets = 10,
-  size_of_val_set = 8
+  size_of_val_set = 8,
+  batch_corr_method = "ComBat"
 )
 }
 \arguments{
@@ -42,6 +43,8 @@ format "0 Doppel.train" if . is used as separator}
 
 \item{size_of_val_set}{Size of each validation set (We assume the size of each validation set
 is the same, this is used for the binomial model)}
+
+\item{batch_corr_method}{Batch correlation method used. Only 2 options are accepted "ComBat" or "ComBat_seq".}
 }
 \value{
 Validation Accuracies
@@ -66,8 +69,10 @@ can be observed, we can conclude that the doppelgangers included are functional 
 }
 }
 \examples{
+\dontrun{
 verificationResults = verifyDoppelgangers(
 experiment_plan_filename = "tutorial/experimentPlan.csv",
 raw_data = rc,
 meta_data = rc_metadata)
+}
 }

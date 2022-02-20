@@ -30,13 +30,16 @@
 #' @param num_random_feature_sets Number of random feature sets for each training-validation set
 #' @param size_of_val_set Size of each validation set (We assume the size of each validation set
 #'                        is the same, this is used for the binomial model)
+#' @param batch_corr_method Batch correlation method used. Only 2 options are accepted "ComBat" or "ComBat_seq".
 #' @return Validation Accuracies
 #' @export
 #' @examples
+#' \dontrun{
 #' verificationResults = verifyDoppelgangers(
 #' experiment_plan_filename = "tutorial/experimentPlan.csv",
 #' raw_data = rc,
 #' meta_data = rc_metadata)
+#' }
 
 verifyDoppelgangers <- function(experiment_plan_filename,
                                 raw_data,
@@ -47,7 +50,8 @@ verifyDoppelgangers <- function(experiment_plan_filename,
                                 do_batch_corr=TRUE,
                                 k=5,
                                 num_random_feature_sets=10,
-                                size_of_val_set=8){
+                                size_of_val_set=8,
+                                batch_corr_method="ComBat"){
   required_columns = c("Class", "Batch")
   # Check that metadata contains "Class", "Batch" columns
   if (!all(required_columns %in% colnames(meta_data))){
@@ -62,12 +66,27 @@ verifyDoppelgangers <- function(experiment_plan_filename,
   # 1. Prepocessing (Batch Correction and Min-Max Normalisation)
   print("1. Preprocessing data...")
   if (do_batch_corr){
-    batches = meta_data[colnames(raw_data), "Batch"]
-    return_list$combat_minmax = sva::ComBat(dat=raw_data, batch=batches)
+    if (batch_corr_method=="ComBat"){
+      print("- Batch correcting with sva:ComBat...")
+      batches = meta_data[colnames(raw_data), "Batch"]
+      return_list$combat_minmax = sva::ComBat(dat=raw_data, batch=batches)
+    }
+    else if (batch_corr_method=="ComBat_seq"){
+      print("- Batch correcting with sva:ComBat_seq...")
+      batches = meta_data[colnames(raw_data), "Batch"]
+      return_list$combat_minmax = sva::ComBat_seq(counts=as.matrix(raw_data), batch=batches)
+    }
+    else {
+      print("Error: Invalid batch correction method is specified.")
+      print("Only ComBat and ComBat_seq batch correction methods are available.")
+      return()
+    }
   }
   else {
+    print("- Skip batch correction")
     return_list$combat_minmax = raw_data
   }
+  print("- Carrying out min-max normalisation")
   return_list$combat_minmax = as.data.frame(apply(return_list$combat_minmax,1, minmax))
 
   #2. Random Feature Set Selection
