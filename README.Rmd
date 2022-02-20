@@ -175,7 +175,7 @@ paste("PPCC cut off:", ppccDoppelgangerResults$cut_off)
 To visualize the PPCC data doppelgangers, we pass the ppccDoppelgangerResults (output list of getPPCCDoppelgangers) to the visualisePPCCDoppelgangers function. 
 
 ```{r}
-visualisePPCCDoppelgangers(ppccDoppelgangerResults = ppccDoppelgangerResults)
+visualisePPCCDoppelgangers(ppccDoppelgangerResults)
 ```
 
 ### 3) Effects of functional doppelgangers in machine learning
@@ -187,9 +187,7 @@ We show that the PPCC data doppelgangers found above cause the doppelganger effe
 
 ```{r}
 verificationResults = verifyDoppelgangers(
-  experimentPlanFilename = "tutorial/experimentPlan.csv",
-  raw_data = rc,
-  meta_data = rc_metadata)
+  "tutorial/experimentPlan.csv", rc, rc_metadata)
 ```
 The above functions carry out the experiment plan in experimentPlan.csv and return the results in a list. The following are the elements in the list: 
 
@@ -239,7 +237,7 @@ ori_train_valid_names = c("Doppel_0","Doppel_2", "Doppel_4", "Doppel_6", "Doppel
 
 new_train_valid_names = c("0 Doppel", "2 Doppel", "4 Doppel", "6 Doppel", "8 Doppel", "Binomial", "Perfect Leakage")
 
-visualiseVerificationResults( verificationResults, 
+visualiseVerificationResults(verificationResults, 
                             ori_train_valid_names, 
                             new_train_valid_names)
 

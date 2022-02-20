@@ -4,15 +4,15 @@
 \alias{visualisePPCCDoppelgangers}
 \title{A function to visualize PPCC data doppelgangers on a scatter plot}
 \usage{
-visualisePPCCDoppelgangers(ppccDoppelgangerResults)
+visualisePPCCDoppelgangers(ppcc_doppelganger_results)
 }
 \arguments{
-\item{ppccDoppelgangerResults}{List returned from \code{\link{getPPCCDoppelgangers}}}
+\item{ppcc_doppelganger_results}{List returned from \code{\link{getPPCCDoppelgangers}}}
 }
 \description{
 This function visualizes PPCC data doppelgangers from \code{\link{getPPCCDoppelganger}}
 on adjacent univariate scatter plot.
 }
 \examples{
-visualisePPCCDoppelgangers(ppccDoppelgangerResults = ppccDoppelgangerResults)
+visualisePPCCDoppelgangers(ppcc_doppelganger_results = ppcc_doppelganger_results)
 }

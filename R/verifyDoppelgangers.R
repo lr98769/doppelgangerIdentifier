@@ -15,32 +15,39 @@
 #' - Try to put both training-validation columns beside each other and leave no column gaps
 #' - Refer to the csv file in the tutorial on the GitHub README.
 #'
-#' @param ppccDoppelgangerResults List returned from \code{\link{getPPCCDoppelgangers}}
-#' @param experimentPlanFilename Name of file containing csv experiment plan.
+#' @param experiment_plan_filename Name of file containing csv experiment plan.
 #' The csv file has a header with the names of the training_validation sets (e.g. "Doppel_0.train" or "Doppel_0.valid").
 #' In each column (e.g. "Doppel_0.train" column), we include the names of all samples included in this training/validation set.
-#' @param metadata File containing metadata
-#' @param featureSetPortion Proportion of variables to be used for feature set generation
-#' @param seednum Seed number for random feature set generation
+#' @param raw_data Dataframe of count matrix before batch correction
+#' @param meta_data Dataframe of meta data
+#' @param feature_set_portion Proportion of variables to be used for feature set generation
+#' @param seed_num Seed number for random feature set generation
 #' @param separator The character separating the name of the training_validation pair
 #' e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in
 #' format "0 Doppel.train" if . is used as separator
+#' @param do_batch_corr If False, no batch correction is carried out
+#' @param k k hyperparamter for KNN classification models
+#' @param num_random_feature_sets Number of random feature sets for each training-validation set
+#' @param size_of_val_set Size of each validation set (We assume the size of each validation set
+#'                        is the same, this is used for the binomial model)
 #' @return Validation Accuracies
 #' @export
 #' @examples
 #' verificationResults = verifyDoppelgangers(
-#' experimentPlanFilename = "tutorial/experimentPlan.csv",
+#' experiment_plan_filename = "tutorial/experimentPlan.csv",
 #' raw_data = rc,
 #' meta_data = rc_metadata)
 
-verifyDoppelgangers <- function(experimentPlanFilename,
-                                      raw_data,
-                                      meta_data,
-                                      featureSetPortion=0.1,
-                                      seednum = 2021,
-                                      separator = "\\.",
-                                      do.batch.corr=TRUE,
-                                      k=5){
+verifyDoppelgangers <- function(experiment_plan_filename,
+                                raw_data,
+                                meta_data,
+                                feature_set_portion=0.1,
+                                seed_num = 2021,
+                                separator = "\\.",
+                                do_batch_corr=TRUE,
+                                k=5,
+                                num_random_feature_sets=10,
+                                size_of_val_set=8){
   required_columns = c("Class", "Batch")
   # Check that metadata contains "Class", "Batch" columns
   if (!all(required_columns %in% colnames(meta_data))){
@@ -54,7 +61,7 @@ verifyDoppelgangers <- function(experimentPlanFilename,
 
   # 1. Prepocessing (Batch Correction and Min-Max Normalisation)
   print("1. Preprocessing data...")
-  if (do.batch.corr){
+  if (do_batch_corr){
     batches = meta_data[colnames(raw_data), "Batch"]
     return_list$combat_minmax = sva::ComBat(dat=raw_data, batch=batches)
   }
@@ -66,10 +73,10 @@ verifyDoppelgangers <- function(experimentPlanFilename,
   #2. Random Feature Set Selection
   # 1. 10 generated feature sets (Size of 10% of all features)
   print("2. Generating Feature Sets...")
-  feature_set_size = floor(featureSetPortion * ncol(return_list$combat_minmax))
-  set.seed(seednum)
+  feature_set_size = floor(feature_set_portion * ncol(return_list$combat_minmax))
+  set.seed(seed_num)
   return_list$feature_sets=list()
-  for (i in 1:10){
+  for (i in 1:num_random_feature_sets){
     entry_name = paste("random",i)
     return_list$feature_sets[[entry_name]] = sample(
       colnames(return_list$combat_minmax),                                                  feature_set_size)
@@ -81,9 +88,9 @@ verifyDoppelgangers <- function(experimentPlanFilename,
   return_list$feature_sets[["top10variance"]] = head(rownames(feature_selection), feature_set_size)
   return_list$feature_sets[["bot10variance"]] = tail(rownames(feature_selection), feature_set_size)
 
-  # 3. Experiment Design: Segregate samples into training (28) and validation (8)
+  # 3. Experiment Design: Segregate samples into training and validation
   print("3. Loading Experiment Plan...")
-  return_list$experimentPlanList = loadExperimentPlan(experimentPlanFilename,
+  return_list$experimentPlanList = loadExperimentPlan(experiment_plan_filename,
                                                       raw_data,
                                                       separator=separator)
 
@@ -140,7 +147,7 @@ verifyDoppelgangers <- function(experimentPlanFilename,
 
   # Binomial negative control
   set.seed(10)
-  theoretical_acc = rbinom(numFeatureSets, 8, 0.5)/8
+  theoretical_acc = rbinom(numFeatureSets, size_of_val_set, 0.5)/size_of_val_set
   return_list$accuracy_mat[,"Neg_Con"] = theoretical_acc
   index = 1
   for (feature_set in names(return_list$feature_sets)){

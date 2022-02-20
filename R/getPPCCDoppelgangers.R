@@ -21,7 +21,7 @@
 #' @param meta_data Data frame with the columns "Class", "Patient_ID", "Batch"
 #' indicating the class, patient id and batch of the sample respectively and each row
 #' is a sample name. Ensure the sample names are rownames of the data frame not a separate column in the data set.
-#' @param do.batch.corr If False, no batch correction is carried out before doppelgangers are found
+#' @param do_batch_corr If False, no batch correction is carried out before doppelgangers are found
 #' @param correlation_function Correlation function use. Pearson's Correlation Coefficient is used as the default correlation function.
 #'                             User defined functions should accept two vector parameters, x and y.
 #' @return A list containing the PPCC matrix and data frame and a list of
@@ -30,7 +30,7 @@
 #' @examples
 #' ppccDoppelgangerResults = getPPCCDoppelgangers(rc, rc_metadata)
 
-getPPCCDoppelgangers <- function(raw_data, meta_data, do.batch.corr = TRUE, correlation_function=cor){
+getPPCCDoppelgangers <- function(raw_data, meta_data, do_batch_corr = TRUE, correlation_function=cor){
   # Check that all column names are found in meta_data
   if (!all(colnames(raw_data) %in% rownames(meta_data))){
     print("Error: Not all samples (colnames) in raw_data are found in (rownames of) meta_data")
@@ -51,7 +51,7 @@ getPPCCDoppelgangers <- function(raw_data, meta_data, do.batch.corr = TRUE, corr
   # If there are 2 batches
   if (length(unique(meta_data[["Batch"]]))==2){
     # 1. Batch correct the 2 data sets with sva:ComBat
-    if (do.batch.corr){
+    if (do_batch_corr){
       print("1. Batch correcting the 2 data sets with sva:ComBat...")
       batches = meta_data[colnames(raw_data), "Batch"]
       return_list$Batch_corrected = sva::ComBat(dat=raw_data, batch=batches)

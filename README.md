@@ -236,7 +236,7 @@ ppccDoppelgangerResults (output list of getPPCCDoppelgangers) to the
 visualisePPCCDoppelgangers function.
 
 ``` r
-visualisePPCCDoppelgangers(ppccDoppelgangerResults = ppccDoppelgangerResults)
+visualisePPCCDoppelgangers(ppccDoppelgangerResults)
 ```
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
@@ -255,9 +255,7 @@ with the following steps:
 
 ``` r
 verificationResults = verifyDoppelgangers(
-  experimentPlanFilename = "tutorial/experimentPlan.csv",
-  raw_data = rc,
-  meta_data = rc_metadata)
+  "tutorial/experimentPlan.csv", rc, rc_metadata)
 #> [1] "1. Preprocessing data..."
 #> Found2batches
 #> Adjusting for0covariate(s) or covariate level(s)
@@ -346,7 +344,7 @@ ori_train_valid_names = c("Doppel_0","Doppel_2", "Doppel_4", "Doppel_6", "Doppel
 
 new_train_valid_names = c("0 Doppel", "2 Doppel", "4 Doppel", "6 Doppel", "8 Doppel", "Binomial", "Perfect Leakage")
 
-visualiseVerificationResults( verificationResults, 
+visualiseVerificationResults(verificationResults, 
                             ori_train_valid_names, 
                             new_train_valid_names)
 ```

@@ -5,32 +5,43 @@
 \title{Verifies the functionality of Doppelgangers}
 \usage{
 verifyDoppelgangers(
-  experimentPlanFilename,
+  experiment_plan_filename,
   raw_data,
   meta_data,
-  featureSetPortion = 0.1,
-  seednum = 2021,
+  feature_set_portion = 0.1,
+  seed_num = 2021,
   separator = "\\\\.",
-  do.batch.corr = TRUE,
-  k = 5
+  do_batch_corr = TRUE,
+  k = 5,
+  num_random_feature_sets = 10,
+  size_of_val_set = 8
 )
 }
 \arguments{
-\item{experimentPlanFilename}{Name of file containing csv experiment plan.
+\item{experiment_plan_filename}{Name of file containing csv experiment plan.
 The csv file has a header with the names of the training_validation sets (e.g. "Doppel_0.train" or "Doppel_0.valid").
 In each column (e.g. "Doppel_0.train" column), we include the names of all samples included in this training/validation set.}
 
-\item{featureSetPortion}{Proportion of variables to be used for feature set generation}
+\item{raw_data}{Dataframe of count matrix before batch correction}
 
-\item{seednum}{Seed number for random feature set generation}
+\item{meta_data}{Dataframe of meta data}
+
+\item{feature_set_portion}{Proportion of variables to be used for feature set generation}
+
+\item{seed_num}{Seed number for random feature set generation}
 
 \item{separator}{The character separating the name of the training_validation pair
 e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in
 format "0 Doppel.train" if . is used as separator}
 
-\item{ppccDoppelgangerResults}{List returned from \code{\link{getPPCCDoppelgangers}}}
+\item{do_batch_corr}{If False, no batch correction is carried out}
 
-\item{metadata}{File containing metadata}
+\item{k}{k hyperparamter for KNN classification models}
+
+\item{num_random_feature_sets}{Number of random feature sets for each training-validation set}
+
+\item{size_of_val_set}{Size of each validation set (We assume the size of each validation set
+is the same, this is used for the binomial model)}
 }
 \value{
 Validation Accuracies
@@ -56,7 +67,7 @@ can be observed, we can conclude that the doppelgangers included are functional 
 }
 \examples{
 verificationResults = verifyDoppelgangers(
-experimentPlanFilename = "tutorial/experimentPlan.csv",
+experiment_plan_filename = "tutorial/experimentPlan.csv",
 raw_data = rc,
 meta_data = rc_metadata)
 }
