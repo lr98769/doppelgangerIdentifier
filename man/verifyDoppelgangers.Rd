@@ -15,7 +15,8 @@ verifyDoppelgangers(
   k = 5,
   num_random_feature_sets = 10,
   size_of_val_set = 8,
-  batch_corr_method = "ComBat"
+  batch_corr_method = "ComBat",
+  neg_con_seed = 10
 )
 }
 \arguments{
@@ -45,6 +46,8 @@ format "0 Doppel.train" if . is used as separator}
 is the same, this is used for the binomial model)}
 
 \item{batch_corr_method}{Batch correlation method used. Only 2 options are accepted "ComBat" or "ComBat_seq".}
+
+\item{neg_con_seed}{Seed used for negative control}
 }
 \value{
 Validation Accuracies

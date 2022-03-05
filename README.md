@@ -257,12 +257,14 @@ with the following steps:
 verificationResults = verifyDoppelgangers(
   "tutorial/experimentPlan.csv", rc, rc_metadata)
 #> [1] "1. Preprocessing data..."
+#> [1] "- Batch correcting with sva:ComBat..."
 #> Found2batches
 #> Adjusting for0covariate(s) or covariate level(s)
 #> Standardizing Data across genes
 #> Fitting L/S model and finding priors
 #> Finding parametric adjustments
 #> Adjusting the Data
+#> [1] "- Carrying out min-max normalisation"
 #> [1] "2. Generating Feature Sets..."
 #> [1] "3. Loading Experiment Plan..."
 #> [1] "4. Training KNN models..."

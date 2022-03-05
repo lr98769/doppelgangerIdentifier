@@ -32,7 +32,7 @@ visualisePPCCDoppelgangers <- function(ppcc_doppelganger_results){
     ggtitle(label="PPCC Doppelganger Identification") +
     theme(plot.title = element_text(hjust = 0.5)) +
     xlab("Sample Pair Type") +
-    scale_color_manual(values=c("#8800ff","#5c5c5c")) +
+    scale_color_manual(values=c("Not Doppelganger" = "#5c5c5c", "Doppelganger" = "#8800ff")) +
     geom_hline(yintercept=ppcc_doppelganger_results$cut_off, color = "red")+
     annotate(geom="text", label="Cut Off", x=1, y=ppcc_doppelganger_results$cut_off, vjust=-1, colour="red") +
     guides(colour=guide_legend(title="Doppelganger Label"))

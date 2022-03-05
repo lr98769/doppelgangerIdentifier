@@ -31,6 +31,7 @@
 #' @param size_of_val_set Size of each validation set (We assume the size of each validation set
 #'                        is the same, this is used for the binomial model)
 #' @param batch_corr_method Batch correlation method used. Only 2 options are accepted "ComBat" or "ComBat_seq".
+#' @param neg_con_seed Seed used for negative control
 #' @return Validation Accuracies
 #' @export
 #' @examples
@@ -51,7 +52,8 @@ verifyDoppelgangers <- function(experiment_plan_filename,
                                 k=5,
                                 num_random_feature_sets=10,
                                 size_of_val_set=8,
-                                batch_corr_method="ComBat"){
+                                batch_corr_method="ComBat",
+                                neg_con_seed=10){
   required_columns = c("Class", "Batch")
   # Check that metadata contains "Class", "Batch" columns
   if (!all(required_columns %in% colnames(meta_data))){
@@ -96,16 +98,22 @@ verifyDoppelgangers <- function(experiment_plan_filename,
   set.seed(seed_num)
   return_list$feature_sets=list()
   for (i in 1:num_random_feature_sets){
-    entry_name = paste("random",i)
+    entry_name = paste("Random",i)
     return_list$feature_sets[[entry_name]] = sample(
       colnames(return_list$combat_minmax),                                                  feature_set_size)
   }
+  percent = feature_set_portion * 100
+
   # 2. 2 feature set containing features of lowest and highest variance
   feature_selection= t(return_list$combat_minmax)
   feature_selection= cbind(feature_selection , var=apply(feature_selection, 1, FUN=var))
   feature_selection= feature_selection[order(feature_selection[,"var"], decreasing = TRUE),]
-  return_list$feature_sets[["top10variance"]] = head(rownames(feature_selection), feature_set_size)
-  return_list$feature_sets[["bot10variance"]] = tail(rownames(feature_selection), feature_set_size)
+
+  top_feature_set_name = paste("Top", percent, "%","Variance")
+  bot_feature_set_name = paste("Bottom", percent, "%","Variance")
+
+  return_list$feature_sets[[top_feature_set_name]] = head(rownames(feature_selection), feature_set_size)
+  return_list$feature_sets[[bot_feature_set_name]] = tail(rownames(feature_selection), feature_set_size)
 
   # 3. Experiment Design: Segregate samples into training and validation
   print("3. Loading Experiment Plan...")
@@ -165,7 +173,7 @@ verifyDoppelgangers <- function(experiment_plan_filename,
   close = close(pb)
 
   # Binomial negative control
-  set.seed(10)
+  set.seed(neg_con_seed)
   theoretical_acc = rbinom(numFeatureSets, size_of_val_set, 0.5)/size_of_val_set
   return_list$accuracy_mat[,"Neg_Con"] = theoretical_acc
   index = 1

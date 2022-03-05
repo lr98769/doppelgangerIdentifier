@@ -240,7 +240,6 @@ new_train_valid_names = c("0 Doppel", "2 Doppel", "4 Doppel", "6 Doppel", "8 Dop
 visualiseVerificationResults(verificationResults, 
                             ori_train_valid_names, 
                             new_train_valid_names)
-
 ```
 
 We observe a dosage dependent relationship between the number of doppelgangers and the accuracy of models on the validation set since accuracy increases as the number of doppelgangers in validation set increases. 
