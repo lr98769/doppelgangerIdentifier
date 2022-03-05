@@ -68,7 +68,8 @@ can be observed, we can conclude that the doppelgangers included are functional 
   k <span class="op">=</span> <span class="fl">5</span>,
   num_random_feature_sets <span class="op">=</span> <span class="fl">10</span>,
   size_of_val_set <span class="op">=</span> <span class="fl">8</span>,
-  batch_corr_method <span class="op">=</span> <span class="st">"ComBat"</span>
+  batch_corr_method <span class="op">=</span> <span class="st">"ComBat"</span>,
+  neg_con_seed <span class="op">=</span> <span class="fl">10</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -101,6 +102,8 @@ format "0 Doppel.train" if . is used as separator</p></dd>
 is the same, this is used for the binomial model)</p></dd>
 <dt>batch_corr_method</dt>
 <dd><p>Batch correlation method used. Only 2 options are accepted "ComBat" or "ComBat_seq".</p></dd>
+<dt>neg_con_seed</dt>
+<dd><p>Seed used for negative control</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
