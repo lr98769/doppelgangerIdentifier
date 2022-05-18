@@ -1,6 +1,6 @@
 Package: doppelgangerIdentifier
 Title: Identifies Doppelgangers Between Datasets With PPCC And Meta data
-Version: 0.1
+Version: 0.2
 Authors@R: person("Li Rong", "Wang", email = "LWANG039@e.ntu.edu.sg",
             role = c("aut", "cre", "mat"),
            comment = c(ORCID = "0000-0003-3546-9354"))

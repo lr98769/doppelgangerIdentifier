@@ -146,7 +146,7 @@ The functions above carry out step 1-5 and output the results into a list contai
 1. Batch_corrected: Batch corrected data set
 
 ```{r}
-View(ppccDoppelgangerResults$Batch_corrected)
+View(ppccDoppelgangerResults$Processed_data)
 ```
 
 2. PPCC_matrix: Matrix of PPCC between samples of different batch (NumberOfSamplesInBatch1*NumberofSamplesInBatch2)

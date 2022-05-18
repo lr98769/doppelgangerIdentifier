@@ -20,11 +20,12 @@
 #' @param raw_data Data frame where each column is a sample and each row is a variable where rowname of each row is the variable name.
 #' @param meta_data Data frame with the columns "Class", "Patient_ID", "Batch"
 #' indicating the class, patient id and batch of the sample respectively and each row
-#' is a sample name. Ensure the sample names are rownames of the data frame not a separate column in the data set.
+#' is a sample name. Ensure the sample names are row names of the data frame not a separate column in the data set.
 #' @param do_batch_corr If False, no batch correction is carried out before doppelgangers are found
 #' @param correlation_function Correlation function use. Pearson's Correlation Coefficient is used as the default correlation function.
 #'                             User defined functions should accept two vector parameters, x and y.
 #' @param batch_corr_method Batch correlation method used. Only 2 options are accepted "ComBat" or "ComBat_seq".
+#' @param do_min_max If True, min max normalization is carried out just before PPCC calulation
 #' @return A list containing the PPCC matrix and data frame and a list of
 #' doppelgangers identified
 #' @export
@@ -35,7 +36,8 @@ getPPCCDoppelgangers <- function(raw_data,
                                  meta_data,
                                  do_batch_corr = TRUE,
                                  correlation_function=cor,
-                                 batch_corr_method="ComBat"){
+                                 batch_corr_method="ComBat",
+                                 do_min_max=FALSE){
 
   # Check that all column names are found in meta_data
   if (!all(colnames(raw_data) %in% rownames(meta_data))){
@@ -61,23 +63,29 @@ getPPCCDoppelgangers <- function(raw_data,
       if (batch_corr_method=="ComBat"){
         print("1. Batch correcting the 2 data sets with sva:ComBat...")
         batches = meta_data[colnames(raw_data), "Batch"]
-        return_list$Batch_corrected = sva::ComBat(dat=raw_data, batch=batches)
+        return_list$Processed_data = sva::ComBat(dat=raw_data, batch=batches)
       }
       else if (batch_corr_method=="ComBat_seq"){
         print("1. Batch correcting the 2 data sets with sva:ComBat_seq...")
         batches = meta_data[colnames(raw_data), "Batch"]
-        return_list$Batch_corrected = sva::ComBat_seq(counts=as.matrix(raw_data), batch=batches)
-      }
-      else {
+        return_list$Processed_data = sva::ComBat_seq(counts=as.matrix(raw_data), batch=batches)
+      } else {
         print("Error: Invalid batch correction method is specified.")
         print("Only ComBat and ComBat_seq batch correction methods are available.")
         return()
       }
     } else {
       print("1. Skip batch correction")
-      return_list$Batch_corrected = raw_data
+      return_list$Processed_data = raw_data
     }
 
+    # Do min max normalization
+    if (do_min_max){
+      print("- Data is min-max normalized")
+      return_list$Processed_data = t(as.data.frame(apply(return_list$Processed_data, 1, minmax)))
+    } else {
+      print("- Data is not min-max normalized")
+    }
 
     #2. Calculate PPCC between samples of each batch
     # Separate batches
@@ -86,7 +94,7 @@ getPPCCDoppelgangers <- function(raw_data,
     batches = list() # Separate samples by batch
     for (batch_name in batch_names){
       samples_in_batch = rownames(meta_data[meta_data[, "Batch"] == batch_name,])
-      batches[[batch_name]] = return_list$Batch_corrected[, samples_in_batch]
+      batches[[batch_name]] = return_list$Processed_data[, samples_in_batch]
     }
 
     # Get ppcc_matrix and ppcc_df (For visualization with graph)
@@ -119,8 +127,17 @@ getPPCCDoppelgangers <- function(raw_data,
   else if (length(unique(meta_data[["Batch"]]))==1){
     print("1. No batch correction since there is only 1 batch...")
 
-    num_samples = ncol(raw_data)
-    sample_names = colnames(raw_data)
+    # Do min max normalization
+    if (do_min_max){
+      print("- Data is min-max normalized")
+      return_list$Processed_data = t(as.data.frame(apply(raw_data, 1, minmax)))
+    } else {
+      print("- Data is not min-max normalized")
+      return_list$Processed_data = raw_data
+    }
+
+    num_samples = ncol(return_list$Processed_data)
+    sample_names = colnames(return_list$Processed_data)
     number_of_pairs = num_samples*(num_samples+1)/2
 
     # Get ppcc_matrix and ppcc_df (For visualization with graph)
@@ -140,7 +157,7 @@ getPPCCDoppelgangers <- function(raw_data,
     for (i in 1:num_samples){
       for (j in 1:num_samples){
         if (i>=j){
-          ppcc = correlation_function(raw_data[,i], raw_data[,j])
+          ppcc = correlation_function(return_list$Processed_data[,i], return_list$Processed_data[,j])
           return_list$PPCC_matrix[i,j] = ppcc
           return_list$PPCC_df[index,] = c(sample_names[i],
                                           sample_names[j], ppcc)
