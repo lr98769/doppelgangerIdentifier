@@ -204,7 +204,7 @@
 <span class="co">#&gt; [1] "4. Calculating PPCC cut off to identify PPCC data doppelgangers..."</span>
 <span class="co">#&gt; [1] "5. Identifying PPCC data doppelgangers..."</span></code></pre></div>
 <p>The functions above carry out step 1-5 and output the results into a list containing the following elements:</p>
-<ol style="list-style-type: decimal"><li>Batch_corrected: Batch corrected data set</li></ol>
+<ol style="list-style-type: decimal"><li>Processed_data: Data set before PPCC calculation (Batch corrected and/or min-max normalised)</li></ol>
 <!-- end list --><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">ppccDoppelgangerResults</span><span class="op">$</span><span class="va">Processed_data</span><span class="op">)</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal"><li>PPCC_matrix: Matrix of PPCC between samples of different batch (NumberOfSamplesInBatch1*NumberofSamplesInBatch2)</li></ol>
