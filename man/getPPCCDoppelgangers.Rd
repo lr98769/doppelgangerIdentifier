@@ -9,7 +9,8 @@ getPPCCDoppelgangers(
   meta_data,
   do_batch_corr = TRUE,
   correlation_function = cor,
-  batch_corr_method = "ComBat"
+  batch_corr_method = "ComBat",
+  do_min_max = FALSE
 )
 }
 \arguments{
@@ -17,7 +18,7 @@ getPPCCDoppelgangers(
 
 \item{meta_data}{Data frame with the columns "Class", "Patient_ID", "Batch"
 indicating the class, patient id and batch of the sample respectively and each row
-is a sample name. Ensure the sample names are rownames of the data frame not a separate column in the data set.}
+is a sample name. Ensure the sample names are row names of the data frame not a separate column in the data set.}
 
 \item{do_batch_corr}{If False, no batch correction is carried out before doppelgangers are found}
 
@@ -25,6 +26,8 @@ is a sample name. Ensure the sample names are rownames of the data frame not a s
 User defined functions should accept two vector parameters, x and y.}
 
 \item{batch_corr_method}{Batch correlation method used. Only 2 options are accepted "ComBat" or "ComBat_seq".}
+
+\item{do_min_max}{If True, min max normalization is carried out just before PPCC calulation}
 }
 \value{
 A list containing the PPCC matrix and data frame and a list of

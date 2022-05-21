@@ -143,10 +143,10 @@ ppccDoppelgangerResults = getPPCCDoppelgangers(rc, rc_metadata)
 ```
 The functions above carry out step 1-5 and output the results into a list containing the following elements:
 
-1. Batch_corrected: Batch corrected data set
+1. Processed_data: Data set before PPCC calculation (Batch corrected and/or min-max normalised)
 
 ```{r}
-View(ppccDoppelgangerResults$Batch_corrected)
+View(ppccDoppelgangerResults$Processed_data)
 ```
 
 2. PPCC_matrix: Matrix of PPCC between samples of different batch (NumberOfSamplesInBatch1*NumberofSamplesInBatch2)
