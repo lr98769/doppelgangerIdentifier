@@ -1,0 +1,8 @@
+Data set is a subset of the GSE81538 RNA-Seq data set.
+
+The steps below describe the preprocessing methods used:
+1. GSE81538_transcript_expression_405.csv.gz was downloaded from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE81538.
+2. RNA-Seq transcripts were mapped to gene symbols with the mapping CSV file found here:  https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE81538.
+3. Values of transcripts sharing the same gene symbol were summed.
+4. ""her2 consensus:ch1" and "her2 status:ch1" meta data columns were used as the class label for the "train" and "valid" batches.
+5. 50 samples from each class and batch ("train", "valid") were selected for this tutorial.

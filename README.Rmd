@@ -88,7 +88,7 @@ and ready to use with the doppelgangerIdentifer R package.
 
 *Note: Cite the original source of each data set used*
 
-## Tutorial
+## Tutorial 1 (Microarray Data)
 
 In this example, we will be showing how PPCC data doppelgangers can be identified and verified for functionality with the doppelgangerIdentifier r package.
 
@@ -187,7 +187,7 @@ We show that the PPCC data doppelgangers found above cause the doppelganger effe
 
 ```{r}
 verificationResults = verifyDoppelgangers(
-  "tutorial/experimentPlan.csv", rc, rc_metadata)
+  "tutorial/experiment_plans/rc_ex_plan.csv", rc, rc_metadata)
 ```
 The above functions carry out the experiment plan in experimentPlan.csv and return the results in a list. The following are the elements in the list: 
 
@@ -243,3 +243,77 @@ visualiseVerificationResults(verificationResults,
 ```
 
 We observe a dosage dependent relationship between the number of doppelgangers and the accuracy of models on the validation set since accuracy increases as the number of doppelgangers in validation set increases. 
+
+## Tutorial 2 (RNA-Seq Data)
+
+In this tutorial, we will be demonstrating how functional doppelgangers can be identfiied in a RNA-Seq data set. 
+
+### 0) Importing the doppelgangerIdentifier package
+
+```{r Import Packages}
+library("doppelgangerIdentifier")
+```
+
+### 1) Loading the breast cancer data set 
+The loaded data set is a preprocessed subset of the GSE81538 RNA-Seq data set. Details of the preprocessing steps are detailed in "./tutorial/dataset/dataset_preprocessing_information.txt".
+
+```{r Import data set}
+bc = readRDS("tutorial/dataset/bc_her2_tut.rds")
+bc_meta = readRDS("tutorial/dataset/bc_her2_meta_tut.rds")
+```
+
+### 2) Identifying doppelgangers
+
+Since the data set used is an RNA-Seq data set, Combat-Seq will be used as the batch correction method prior to PPCC value calculation.
+
+```{r PPCC DD identification}
+# Get PPCC Data Doppelgangers
+start_time = Sys.time()
+doppel_bc = getPPCCDoppelgangers(
+  raw_data = bc, 
+  meta_data = bc_meta,
+  do_batch_corr = TRUE,
+  do_min_max = TRUE,
+  batch_corr_method = "ComBat_seq"
+)
+end_time = Sys.time()
+end_time - start_time
+```
+```{r Visualise PPCC DDs}
+visualisePPCCDoppelgangers(doppel_bc)
+```
+
+
+### 3) Verification of PPCC DDs 
+
+To find out if the identified PPCC DDs are functional doppelgangers, we create a experiment plan that incrementally increases the number of PPCC DD samples in the validation set. If we observe an increasing trend of random model accuracy with increasing number of PPCC DD samples in the validation set, then we can conclude that the identified PPCC DDs are FDs.
+
+```{r Verifying PPCC DDs}
+start_time = Sys.time()
+veri_bc = verifyDoppelgangers(
+  experiment_plan_filename = "tutorial/experiment_plans/bc_ex_plan.csv",
+  raw_data = bc,
+  meta_data = bc_meta,
+  batch_corr_method = "ComBat_seq",
+  k=9,
+  size_of_val_set = 48,
+  feature_set_portion = 0.01
+)
+end_time = Sys.time()
+end_time - start_time
+```
+
+```{r Visualising verification results, fig.width=10, fig.height=6}
+ori_train_valid_names = c("Doppel_0","Doppel_6", "Doppel_12", "Doppel_18", "Doppel_24", "Neg_Con", "Pos_Con_24")
+
+new_train_valid_names = c("0 Doppel", "6 Doppel", "12 Doppel", "18 Doppel", "24 Doppel", "Binomial", "24 Perfect Leakage")
+
+visualiseVerificationResults(
+  veri_bc,
+  original_train_valid_names = ori_train_valid_names,
+  new_train_valid_names = new_train_valid_names
+)
+```
+
+Since a positive relationship between the number of PPCC DD samples and random model accuracy can be observed, we can conclude that all identified PPCC DDs are FDs.
+
