@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 2.0.3
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-05-25T07:58Z
+last_built: 2022-08-02T04:23Z
 urls:
   reference: https://lr98769.github.io/doppelgangerIdentifier/reference
   article: https://lr98769.github.io/doppelgangerIdentifier/articles
