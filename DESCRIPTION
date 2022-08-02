@@ -1,8 +1,8 @@
 Package: doppelgangerIdentifier
 Title: Identifies Doppelgangers Between Datasets With PPCC And Meta data
-Version: 0.2
+Version: 0.3
 Authors@R: person("Li Rong", "Wang", email = "LWANG039@e.ntu.edu.sg",
-            role = c("aut", "cre", "mat"),
+            role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-3546-9354"))
 Description: Identifies PPCC data doppelgangers between and within biomedical datasets 
               using Pairwise Pearson's Correlation Coefficient (PPCC) as a similar metric
@@ -13,9 +13,12 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 LazyData: true
+Depends:
+  R (>= 3.5.0)
 Imports:
     sva,
     ggplot2,
     class,
-    utils
+    utils,
+    dplyr
 URL: https://lr98769.github.io/doppelgangerIdentifier/

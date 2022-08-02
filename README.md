@@ -4,7 +4,6 @@
 # doppelgangerIdentifier
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The goal of doppelgangerIdentifier is to find PPCC data doppelgangers
@@ -27,7 +26,7 @@ devtools::install_github("lr98769/doppelgangerIdentifier")
 
 There are 4 main functions in this package:
 
-### 1\. getPPCCDoppelgangers
+### 1. getPPCCDoppelgangers
 
 Finds PPCC data doppelgangers in the data using batch, class and patient
 id meta data.
@@ -42,7 +41,7 @@ library(doppelgangerIdentifier)
 ppccDoppelgangerResults = getPPCCDoppelgangers(raw_data, meta_data)
 ```
 
-### 2\. visualisePPCCDoppelgangers
+### 2. visualisePPCCDoppelgangers
 
 Shows the distribution of PPCCs of different sample pairs.
 
@@ -51,21 +50,19 @@ library(doppelgangerIdentifier)
 visualisePPCCDoppelgangers(ppccDoppelgangerResults)
 ```
 
-### 3\. verifyDoppelgangers
+### 3. verifyDoppelgangers
 
 Tests inflationary effects of the PPCC data doppelganger.
 
-  - Note: Refer to the documentation for the format of the experiment
+-   Note: Refer to the documentation for the format of the experiment
     plan file.
-
-<!-- end list -->
 
 ``` r
 library(doppelgangerIdentifier)
 veri_result = verifyDoppelgangers(experimentPlanFilename, raw_data, meta_data)
 ```
 
-### 4\. visualiseVerificationResults
+### 4. visualiseVerificationResults
 
 Visualise the accuracy of each Train-Valid Pair.
 
@@ -81,7 +78,7 @@ data are available and ready to use with the doppelgangerIdentifer R
 package.
 
 | Name |                      Description                       |             Citation              |
-| :--: | :----------------------------------------------------: | :-------------------------------: |
+|:----:|:------------------------------------------------------:|:---------------------------------:|
 |  rc  |        Renal Cell Carcinoma Proteomics Data Set        |            Guo et al.             |
 | dmd  |  Duchenne Muscular Dystrophy (DMD) Microarry Data Set  | Haslett et al. & Pescatori et al. |
 | leuk |              Leukemia Microarry Data Set               |  Golub et al. & Armstrong et al.  |
@@ -95,7 +92,7 @@ In this example, we will be showing how PPCC data doppelgangers can be
 identified and verified for functionality with the
 doppelgangerIdentifier r package.
 
-### 0\) Importing the doppelgangerIdentifier package
+### 0) Importing the doppelgangerIdentifier package
 
 ``` r
 library("doppelgangerIdentifier")
@@ -105,7 +102,7 @@ library("doppelgangerIdentifier")
 > by chance, resulting in an inflation of model accuracies on the
 > validation dataset regardless of how we train the model.
 
-### 1\) Importing Renal Carcinoma (RC) Dataset
+### 1) Importing Renal Carcinoma (RC) Dataset
 
 To illustrate the impacts of the Doppelganger effect, we will be using a
 Renal Carcinoma (RC) gene expression dataset.
@@ -117,7 +114,7 @@ data(rc)
 data(rc_metadata)
 ```
 
-### 2\) What Do Functional Doppelgangers Look Like?
+### 2) What Do Functional Doppelgangers Look Like?
 
 > **Functional Doppelgangers**: Sample pairs between training and
 > validation datasets that cause doppelganger effect.
@@ -160,11 +157,13 @@ we treat each batch as a separate data set and try to find PPCC data
 doppelgangers between the 2 batches.
 
 **These are the steps we use to identify PPCC data doppelgangers:**
-![](tutorial/images/doppelgangerIdentification.png)
+<img src="tutorial/images/doppelgangerIdentification.png"
+style="width:75.0%" />
 
 *PPCC: Pairwise Pearson’s Correlation Coefficient*
 
 ``` r
+start_time = Sys.time()
 ppccDoppelgangerResults = getPPCCDoppelgangers(rc, rc_metadata)
 #> [1] "1. Batch correcting the 2 data sets with sva:ComBat..."
 #> Found2batches
@@ -179,54 +178,47 @@ ppccDoppelgangerResults = getPPCCDoppelgangers(rc, rc_metadata)
 #> [1] "3. Labelling Sample Pairs according to their Class and Patient Similarities..."
 #> [1] "4. Calculating PPCC cut off to identify PPCC data doppelgangers..."
 #> [1] "5. Identifying PPCC data doppelgangers..."
+end_time = Sys.time()
+end_time-start_time
+#> Time difference of 4.11564 secs
 ```
 
 The functions above carry out step 1-5 and output the results into a
 list containing the following elements:
 
-1.  Processed\_data: Data set before PPCC calculation (Batch corrected
+1.  Processed_data: Data set before PPCC calculation (Batch corrected
     and/or min-max normalised)
-
-<!-- end list -->
 
 ``` r
 View(ppccDoppelgangerResults$Processed_data)
 ```
 
-2.  PPCC\_matrix: Matrix of PPCC between samples of different batch
+2.  PPCC_matrix: Matrix of PPCC between samples of different batch
     (NumberOfSamplesInBatch1\*NumberofSamplesInBatch2)
-
-<!-- end list -->
 
 ``` r
 View(ppccDoppelgangerResults$PPCC_matrix)
 ```
 
-3.  PPCC\_df: Data frame of PPCC between samples of different batch
+3.  PPCC_df: Data frame of PPCC between samples of different batch
     (NumberOfSamplePairs\*5). The columns of the data frame are as
     follows:
 
-<!-- end list -->
-
-  - Sample1: Name of first sample of the pair (From first batch)
-  - Sample2: Name of second sample of the pair (From second batch)
-  - PPCC: Pearson’s correlation coefficient of this sample pair
-  - ClassPatient: Label for the sample pair according to class and
+-   Sample1: Name of first sample of the pair (From first batch)
+-   Sample2: Name of second sample of the pair (From second batch)
+-   PPCC: Pearson’s correlation coefficient of this sample pair
+-   ClassPatient: Label for the sample pair according to class and
     patient id similarity
-  - DoppelgangerLabel: Labels the sample pair as a PPCC data
+-   DoppelgangerLabel: Labels the sample pair as a PPCC data
     doppelganger or not
-
-<!-- end list -->
 
 ``` r
 View(ppccDoppelgangerResults$PPCC_df)
 ```
 
-4.  cut\_off: Cut off PPCC for the identification of PPCC data
+4.  cut_off: Cut off PPCC for the identification of PPCC data
     doppelgangers as sample pairs between the same class and different
     patient with PPCC greater than cut off point
-
-<!-- end list -->
 
 ``` r
 paste("PPCC cut off:", ppccDoppelgangerResults$cut_off)
@@ -243,7 +235,7 @@ visualisePPCCDoppelgangers(ppccDoppelgangerResults)
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
-### 3\) Effects of functional doppelgangers in machine learning
+### 3) Effects of functional doppelgangers in machine learning
 
 When functional doppelgangers are in both training and validation
 datasets, an inflation in accuracy on the validation data set regardless
@@ -253,12 +245,15 @@ We show that the PPCC data doppelgangers found above cause the
 doppelganger effect when included in both training and validation sets
 with the following steps:
 
-![](tutorial/images/functionalDoppelgangerTesting.png)
+<img src="tutorial/images/functionalDoppelgangerTesting.png"
+style="width:75.0%" />
 
 ``` r
+start_time = Sys.time()
 verificationResults = verifyDoppelgangers(
   "tutorial/experiment_plans/rc_ex_plan.csv", rc, rc_metadata)
-#> [1] "1. Preprocessing data..."
+#> [1] "1. Loading Experiment Plan..."
+#> [1] "2. Preprocessing data..."
 #> [1] "- Batch correcting with sva:ComBat..."
 #> Found2batches
 #> Adjusting for0covariate(s) or covariate level(s)
@@ -267,47 +262,41 @@ verificationResults = verifyDoppelgangers(
 #> Finding parametric adjustments
 #> Adjusting the Data
 #> [1] "- Carrying out min-max normalisation"
-#> [1] "2. Generating Feature Sets..."
-#> [1] "3. Loading Experiment Plan..."
+#> [1] "3. Generating Feature Sets..."
 #> [1] "4. Training KNN models..."
 #>   |                                                                              |=                                                                     |   1%  |                                                                              |==                                                                    |   3%  |                                                                              |===                                                                   |   4%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |======                                                                |   8%  |                                                                              |=======                                                               |  10%  |                                                                              |========                                                              |  11%  |                                                                              |=========                                                             |  12%  |                                                                              |==========                                                            |  14%  |                                                                              |===========                                                           |  15%  |                                                                              |============                                                          |  17%  |                                                                              |=============                                                         |  18%  |                                                                              |==============                                                        |  19%  |                                                                              |===============                                                       |  21%  |                                                                              |================                                                      |  22%  |                                                                              |=================                                                     |  24%  |                                                                              |==================                                                    |  25%  |                                                                              |==================                                                    |  26%  |                                                                              |===================                                                   |  28%  |                                                                              |====================                                                  |  29%  |                                                                              |=====================                                                 |  31%  |                                                                              |======================                                                |  32%  |                                                                              |=======================                                               |  33%  |                                                                              |========================                                              |  35%  |                                                                              |=========================                                             |  36%  |                                                                              |==========================                                            |  38%  |                                                                              |===========================                                           |  39%  |                                                                              |============================                                          |  40%  |                                                                              |=============================                                         |  42%  |                                                                              |==============================                                        |  43%  |                                                                              |===============================                                       |  44%  |                                                                              |================================                                      |  46%  |                                                                              |=================================                                     |  47%  |                                                                              |==================================                                    |  49%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================                                  |  51%  |                                                                              |=====================================                                 |  53%  |                                                                              |======================================                                |  54%  |                                                                              |=======================================                               |  56%  |                                                                              |========================================                              |  57%  |                                                                              |=========================================                             |  58%  |                                                                              |==========================================                            |  60%  |                                                                              |===========================================                           |  61%  |                                                                              |============================================                          |  62%  |                                                                              |=============================================                         |  64%  |                                                                              |==============================================                        |  65%  |                                                                              |===============================================                       |  67%  |                                                                              |================================================                      |  68%  |                                                                              |=================================================                     |  69%  |                                                                              |==================================================                    |  71%  |                                                                              |===================================================                   |  72%  |                                                                              |====================================================                  |  74%  |                                                                              |====================================================                  |  75%  |                                                                              |=====================================================                 |  76%  |                                                                              |======================================================                |  78%  |                                                                              |=======================================================               |  79%  |                                                                              |========================================================              |  81%  |                                                                              |=========================================================             |  82%  |                                                                              |==========================================================            |  83%  |                                                                              |===========================================================           |  85%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  88%  |                                                                              |==============================================================        |  89%  |                                                                              |===============================================================       |  90%  |                                                                              |================================================================      |  92%  |                                                                              |=================================================================     |  93%  |                                                                              |==================================================================    |  94%  |                                                                              |===================================================================   |  96%  |                                                                              |====================================================================  |  97%  |                                                                              |===================================================================== |  99%  |                                                                              |======================================================================| 100%
+end_time = Sys.time()
+end_time-start_time
+#> Time difference of 0.9779961 secs
 ```
 
 The above functions carry out the experiment plan in experimentPlan.csv
 and return the results in a list. The following are the elements in the
 list:
 
-1.  combat\_minmax: The gene expression data set after min-max
+1.  combat_minmax: The gene expression data set after min-max
     normalization.
-
-<!-- end list -->
 
 ``` r
 View(verificationResults$combat_minmax)
 ```
 
-2.  feature\_sets: The 10 randomly generated feature sets and 2 feature
+2.  feature_sets: The 10 randomly generated feature sets and 2 feature
     set containing features of lowest and highest variance.
-
-<!-- end list -->
 
 ``` r
 View(verificationResults$feature_sets)
 ```
 
-3.  accuracy\_mat: The accuracies of each training\_validation and
-    feature set pair in matrix format
-
-<!-- end list -->
+3.  accuracy_mat: The accuracies of each training_validation and feature
+    set pair in matrix format
 
 ``` r
 View(verificationResults$accuracy_mat)
 ```
 
-4.  accuracy\_df: The accuracies of each training\_validation and
-    feature set pair in dataframe form
-
-<!-- end list -->
+4.  accuracy_df: The accuracies of each training_validation and feature
+    set pair in dataframe form
 
 ``` r
 View(verificationResults$accuracy_df)
@@ -351,6 +340,14 @@ new_train_valid_names = c("0 Doppel", "2 Doppel", "4 Doppel", "6 Doppel", "8 Dop
 visualiseVerificationResults(verificationResults, 
                             ori_train_valid_names, 
                             new_train_valid_names)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 ```
 
 <img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
@@ -365,24 +362,24 @@ increases.
 In this tutorial, we will be demonstrating how functional doppelgangers
 can be identfiied in a RNA-Seq data set.
 
-### 0\) Importing the doppelgangerIdentifier package
+### 0) Importing the doppelgangerIdentifier package
 
 ``` r
 library("doppelgangerIdentifier")
 ```
 
-### 1\) Loading the breast cancer data set
+### 1) Loading the breast cancer data set
 
 The loaded data set is a preprocessed subset of the GSE81538 RNA-Seq
 data set. Details of the preprocessing steps are detailed in
-“./tutorial/dataset/dataset\_preprocessing\_information.txt”.
+“./tutorial/dataset/dataset_preprocessing_information.txt”.
 
 ``` r
 bc = readRDS("tutorial/dataset/bc_her2_tut.rds")
 bc_meta = readRDS("tutorial/dataset/bc_her2_meta_tut.rds")
 ```
 
-### 2\) Identifying doppelgangers
+### 2) Identifying doppelgangers
 
 Since the data set used is an RNA-Seq data set, Combat-Seq will be used
 as the batch correction method prior to PPCC value calculation.
@@ -413,7 +410,7 @@ doppel_bc = getPPCCDoppelgangers(
 #> [1] "5. Identifying PPCC data doppelgangers..."
 end_time = Sys.time()
 end_time - start_time
-#> Time difference of 1.781284 mins
+#> Time difference of 1.783855 mins
 ```
 
 ``` r
@@ -422,7 +419,7 @@ visualisePPCCDoppelgangers(doppel_bc)
 
 <img src="man/figures/README-Visualise PPCC DDs-1.png" width="100%" />
 
-### 3\) Verification of PPCC DDs
+### 3) Verification of PPCC DDs
 
 To find out if the identified PPCC DDs are functional doppelgangers, we
 create a experiment plan that incrementally increases the number of PPCC
@@ -442,7 +439,8 @@ veri_bc = verifyDoppelgangers(
   size_of_val_set = 48,
   feature_set_portion = 0.01
 )
-#> [1] "1. Preprocessing data..."
+#> [1] "1. Loading Experiment Plan..."
+#> [1] "2. Preprocessing data..."
 #> [1] "- Batch correcting with sva:ComBat_seq..."
 #> Found 2 batches
 #> Using null model in ComBat-seq.
@@ -452,13 +450,12 @@ veri_bc = verifyDoppelgangers(
 #> Shrinkage off - using GLM estimates for parameters
 #> Adjusting the data
 #> [1] "- Carrying out min-max normalisation"
-#> [1] "2. Generating Feature Sets..."
-#> [1] "3. Loading Experiment Plan..."
+#> [1] "3. Generating Feature Sets..."
 #> [1] "4. Training KNN models..."
 #>   |                                                                              |=                                                                     |   1%  |                                                                              |==                                                                    |   3%  |                                                                              |===                                                                   |   4%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |======                                                                |   8%  |                                                                              |=======                                                               |  10%  |                                                                              |========                                                              |  11%  |                                                                              |=========                                                             |  12%  |                                                                              |==========                                                            |  14%  |                                                                              |===========                                                           |  15%  |                                                                              |============                                                          |  17%  |                                                                              |=============                                                         |  18%  |                                                                              |==============                                                        |  19%  |                                                                              |===============                                                       |  21%  |                                                                              |================                                                      |  22%  |                                                                              |=================                                                     |  24%  |                                                                              |==================                                                    |  25%  |                                                                              |==================                                                    |  26%  |                                                                              |===================                                                   |  28%  |                                                                              |====================                                                  |  29%  |                                                                              |=====================                                                 |  31%  |                                                                              |======================                                                |  32%  |                                                                              |=======================                                               |  33%  |                                                                              |========================                                              |  35%  |                                                                              |=========================                                             |  36%  |                                                                              |==========================                                            |  38%  |                                                                              |===========================                                           |  39%  |                                                                              |============================                                          |  40%  |                                                                              |=============================                                         |  42%  |                                                                              |==============================                                        |  43%  |                                                                              |===============================                                       |  44%  |                                                                              |================================                                      |  46%  |                                                                              |=================================                                     |  47%  |                                                                              |==================================                                    |  49%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================                                  |  51%  |                                                                              |=====================================                                 |  53%  |                                                                              |======================================                                |  54%  |                                                                              |=======================================                               |  56%  |                                                                              |========================================                              |  57%  |                                                                              |=========================================                             |  58%  |                                                                              |==========================================                            |  60%  |                                                                              |===========================================                           |  61%  |                                                                              |============================================                          |  62%  |                                                                              |=============================================                         |  64%  |                                                                              |==============================================                        |  65%  |                                                                              |===============================================                       |  67%  |                                                                              |================================================                      |  68%  |                                                                              |=================================================                     |  69%  |                                                                              |==================================================                    |  71%  |                                                                              |===================================================                   |  72%  |                                                                              |====================================================                  |  74%  |                                                                              |====================================================                  |  75%  |                                                                              |=====================================================                 |  76%  |                                                                              |======================================================                |  78%  |                                                                              |=======================================================               |  79%  |                                                                              |========================================================              |  81%  |                                                                              |=========================================================             |  82%  |                                                                              |==========================================================            |  83%  |                                                                              |===========================================================           |  85%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  88%  |                                                                              |==============================================================        |  89%  |                                                                              |===============================================================       |  90%  |                                                                              |================================================================      |  92%  |                                                                              |=================================================================     |  93%  |                                                                              |==================================================================    |  94%  |                                                                              |===================================================================   |  96%  |                                                                              |====================================================================  |  97%  |                                                                              |===================================================================== |  99%  |                                                                              |======================================================================| 100%
 end_time = Sys.time()
 end_time - start_time
-#> Time difference of 1.5858 mins
+#> Time difference of 1.589066 mins
 ```
 
 ``` r

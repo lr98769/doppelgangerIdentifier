@@ -3,13 +3,14 @@
 #' This function load a csv experiment plan into list form
 #' @param filename Name of csv file
 #' @param raw_data Data frame where each column is a sample and each row is a variable
-#' @param separator The character separating the name of the training_validation pair 
-#' e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in 
+#' @param meta_data Dataframe of meta data
+#' @param separator The character separating the name of the training_validation pair
+#' e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in
 #' format "0 Doppel.train" if . is used as separator
 #' @return Experiment plan in list form
 #' loadExperimentPlan()
 
-loadExperimentPlan <-function(filename, raw_data, separator="\\."){
+loadExperimentPlan <-function(filename, raw_data, meta_data, separator="\\."){
   experimentCSV = read.csv(filename)
   all_sample_names = c()
   labels = c("train", "valid")
@@ -28,7 +29,13 @@ loadExperimentPlan <-function(filename, raw_data, separator="\\."){
   # Get unique sample names
   all_sample_names = unique(all_sample_names)
   if (all(all_sample_names %in% colnames(raw_data))){
-    return(experimentPlanList)
+    if (all(all_sample_names %in% rownames(meta_data))){
+      return(experimentPlanList)
+    }
+    else {
+      print("Not all sample names in the plan can be found in the rows of meta_data")
+      return()
+    }
   }
   else {
     print("Not all sample names in the plan can be found in the columns of raw_data")

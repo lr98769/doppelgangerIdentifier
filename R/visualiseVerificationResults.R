@@ -21,6 +21,7 @@ visualiseVerificationResults <- function(verification_results,
                                          original_train_valid_names=c(),
                                          new_train_valid_names=c()){
   library(ggplot2)
+  library(dplyr)
   # Ensure it is in the right order
   verification_results$accuracy_df$Train_Valid = factor(
     verification_results$accuracy_df$Train_Valid,
@@ -43,15 +44,37 @@ visualiseVerificationResults <- function(verification_results,
   colour_named_vector =  setNames(colour_vector,
                                   name_vector)
 
-  ggplot(verification_results$accuracy_df, aes(x = Train_Valid, y = Accuracy, color=feature_set_type)) +
-    geom_violin(adjust =4, color=rgb(1,1,1))+ #69faff
+  acc_df = verification_results$accuracy_df
+
+  plot = ggplot() +
+    geom_violin(data = acc_df %>% filter(grepl("Random", FeatureSet)),
+                adjust = 4,
+                color=rgb(1,1,1),
+                aes(x = Train_Valid, y = Accuracy)) +
+    geom_jitter(data = acc_df,
+                size=4,
+                shape=16,
+                position=position_jitter(0.2),
+                alpha=0.9,
+                aes(x = Train_Valid, y = Accuracy,
+                    color=feature_set_type)) +
     ggtitle("Accuracy of KNN Models") +
-    scale_color_manual(values=colour_named_vector, breaks=name_vector) +
-    labs(color = "Feature Set") +
-    geom_jitter(size=4,shape=16, position=position_jitter(0.2),  alpha=0.9) +
     theme(plot.title = element_text(hjust = 0.5)) +
     xlab("Training-Validation Set") +
     ylab("Accuracy") +
+    labs(color = "Feature Set") +
+    scale_color_manual(values=colour_named_vector,
+                       breaks=name_vector) +
     scale_x_discrete(breaks=original_train_valid_names,
-                     labels=new_train_valid_names)
+                     labels=new_train_valid_names)+
+    stat_summary(data = acc_df,
+                 aes(x = Train_Valid, y = Accuracy),
+                 fun = function(x){
+                   ran_acc_mean = mean(head(x, length(x)-2))
+                   return(ran_acc_mean)},
+                 geom = "crossbar",
+                 width = 0.3,
+                 size=0.3,
+                 colour = "#333333")
+  return(plot)
 }

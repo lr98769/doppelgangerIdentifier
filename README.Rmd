@@ -139,7 +139,10 @@ To show how PPCC data doppelgangers are identified with the RC data set, we trea
 *PPCC: Pairwise Pearson's Correlation Coefficient*
 
 ```{r}
+start_time = Sys.time()
 ppccDoppelgangerResults = getPPCCDoppelgangers(rc, rc_metadata)
+end_time = Sys.time()
+end_time-start_time
 ```
 The functions above carry out step 1-5 and output the results into a list containing the following elements:
 
@@ -186,8 +189,11 @@ We show that the PPCC data doppelgangers found above cause the doppelganger effe
 ![](tutorial/images/functionalDoppelgangerTesting.png){width=75%}
 
 ```{r}
+start_time = Sys.time()
 verificationResults = verifyDoppelgangers(
   "tutorial/experiment_plans/rc_ex_plan.csv", rc, rc_metadata)
+end_time = Sys.time()
+end_time-start_time
 ```
 The above functions carry out the experiment plan in experimentPlan.csv and return the results in a list. The following are the elements in the list: 
 

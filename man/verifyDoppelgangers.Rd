@@ -38,7 +38,7 @@ format "0 Doppel.train" if . is used as separator}
 
 \item{do_batch_corr}{If False, no batch correction is carried out}
 
-\item{k}{k hyperparamter for KNN classification models}
+\item{k}{k hyperparameter for KNN classification models}
 
 \item{num_random_feature_sets}{Number of random feature sets for each training-validation set}
 

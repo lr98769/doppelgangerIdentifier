@@ -4,12 +4,14 @@
 \alias{loadExperimentPlan}
 \title{A function to load a csv experiment plan into list form}
 \usage{
-loadExperimentPlan(filename, raw_data, separator = "\\\\.")
+loadExperimentPlan(filename, raw_data, meta_data, separator = "\\\\.")
 }
 \arguments{
 \item{filename}{Name of csv file}
 
 \item{raw_data}{Data frame where each column is a sample and each row is a variable}
+
+\item{meta_data}{Dataframe of meta data}
 
 \item{separator}{The character separating the name of the training_validation pair
 e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in

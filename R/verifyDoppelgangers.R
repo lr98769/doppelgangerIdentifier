@@ -26,7 +26,7 @@
 #' e.g. "0 Doppel" from the "train", "valid" label. Name of each column should be in
 #' format "0 Doppel.train" if . is used as separator
 #' @param do_batch_corr If False, no batch correction is carried out
-#' @param k k hyperparamter for KNN classification models
+#' @param k k hyperparameter for KNN classification models
 #' @param num_random_feature_sets Number of random feature sets for each training-validation set
 #' @param size_of_val_set Size of each validation set (We assume the size of each validation set
 #'                        is the same, this is used for the binomial model)
@@ -63,10 +63,24 @@ verifyDoppelgangers <- function(experiment_plan_filename,
     return()
   }
 
+  # Check that feature set proportion is valid
+  if ((feature_set_portion <= 0) | (feature_set_portion > 1)){
+    print("Error: Invalid feature_set_portion. Please choose a value between 0 and 1.")
+    return()
+  }
+
   return_list = list()
 
-  # 1. Prepocessing (Batch Correction and Min-Max Normalisation)
-  print("1. Preprocessing data...")
+  # 1. Experiment Design: Segregate samples into training and validation
+  print("1. Loading Experiment Plan...")
+  return_list$experimentPlanList = loadExperimentPlan(experiment_plan_filename,
+                                                      raw_data,
+                                                      meta_data,
+                                                      separator=separator)
+
+
+  # 2. Prepocessing (Batch Correction and Min-Max Normalisation)
+  print("2. Preprocessing data...")
   if (do_batch_corr){
     if (batch_corr_method=="ComBat"){
       print("- Batch correcting with sva:ComBat...")
@@ -91,9 +105,9 @@ verifyDoppelgangers <- function(experiment_plan_filename,
   print("- Carrying out min-max normalisation")
   return_list$combat_minmax = as.data.frame(apply(return_list$combat_minmax,1, minmax))
 
-  #2. Random Feature Set Selection
+  #3. Random Feature Set Selection
   # 1. 10 generated feature sets (Size of 10% of all features)
-  print("2. Generating Feature Sets...")
+  print("3. Generating Feature Sets...")
   feature_set_size = floor(feature_set_portion * ncol(return_list$combat_minmax))
   set.seed(seed_num)
   return_list$feature_sets=list()
@@ -115,11 +129,6 @@ verifyDoppelgangers <- function(experiment_plan_filename,
   return_list$feature_sets[[top_feature_set_name]] = head(rownames(feature_selection), feature_set_size)
   return_list$feature_sets[[bot_feature_set_name]] = tail(rownames(feature_selection), feature_set_size)
 
-  # 3. Experiment Design: Segregate samples into training and validation
-  print("3. Loading Experiment Plan...")
-  return_list$experimentPlanList = loadExperimentPlan(experiment_plan_filename,
-                                                      raw_data,
-                                                      separator=separator)
 
   # 4. Training: Train KNN Models Compare Accuracies on Validation Set
   print("4. Training KNN models...")

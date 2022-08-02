@@ -18,11 +18,11 @@ visualisePPCCDoppelgangers <- function(ppcc_doppelganger_results){
   }
 
   required_columns = c("ClassPatient", "PPCC", "DoppelgangerLabel")
-  # Check that metadata contains "Class", "Patient_ID", "Batch" columns
+  # Check that metadata contains "ClassPatient", "PPCC", "DoppelgangerLabel" columns
   if (!all(required_columns %in% colnames(ppcc_doppelganger_results$PPCC_df))){
     columns_to_be_included = setdiff(required_columns,
                                      colnames(ppcc_doppelganger_results$PPCC_df))
-    print(paste("Error: The following columns are not found in meta_data: ",
+    print(paste("Error: The following columns are not found in PPCC_df: ",
                 toString(columns_to_be_included)))
     return()
   }
